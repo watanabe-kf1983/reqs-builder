@@ -83,8 +83,30 @@ components:
 - 言語: Python 3.11+
 - スキーマ検証: Pydantic v2（スキーマ定義 YAML から生成）
 - YAML処理: PyYAML
-- テンプレート: Jinja2
+- テンプレート: Jinja2 / Nunjucks
 - ドキュメントプレビュー: MkDocs または AsciiDoctor + watchexec
+
+### テンプレート仕様
+
+11ty (Eleventy) ライクな仕様を採用：
+
+- テンプレートエンジン: Jinja2（Python）または Nunjucks（JavaScript）
+  - 両者はほぼ同じ構文
+- フロントマターで出力制御を定義:
+
+```yaml
+---
+foreach: entities        # イテレート対象のデータ
+as: entity               # テンプレート内での変数名
+output: "docs/entities/{entity.id}.md"  # 出力パス
+---
+# {{ entity.name }}
+
+{{ entity.description }}
+```
+
+- 将来的に 11ty の pagination 相当の機能が必要になる可能性あり
+- 完全な 11ty 互換は目指さず、必要な機能を段階的に実装
 
 ### 多言語対応（将来）
 
