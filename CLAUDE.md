@@ -175,14 +175,43 @@ components:
 
 ## 技術スタック
 
-- 言語: TypeScript または Python（検討中）
-  - TypeScript: MCP 配布が容易（npx）、Nunjucks との親和性
-  - Python: Pydantic が強力、プロトタイピングが速い
-- スキーマ検証: Zod（TS）または Pydantic v2（Python）
-- YAML 処理: js-yaml / PyYAML
-- テンプレート: Nunjucks（TS）/ Jinja2（Python）
-- クエリ: JSONPath（jsonpath-plus / jsonpath-ng）
-- ドキュメントプレビュー: MkDocs または AsciiDoctor + watchexec
+- **言語: TypeScript**
+- ランタイム: Node.js
+- スキーマ検証: Zod
+- YAML 処理: js-yaml
+- テンプレート: Nunjucks
+- クエリ: jsonpath-plus
+- ディレクトリハッシュ: folder-hash
+- ファイル監視: chokidar（または外部ツール watchexec）
+- ドキュメントプレビュー: MkDocs または AsciiDoctor
+
+### TypeScript を選択した理由
+
+- **MCP 配布が容易**: `npx reqs-builder` で即実行、pip + 仮想環境の説明不要
+- **エコシステム**: chokidar, folder-hash 等の監視・ハッシュ系ライブラリが成熟
+- **単一パッケージで CLI + MCP**: Node の `bin` フィールドで CLI、MCP SDK も npm で導入可能
+- **AI との協調**: 型定義が「仕様書」として機能し、Claude Code がコードの意図を理解しやすい
+- **Nunjucks**: 11ty でも使われている実績、Jinja2 互換で知識流用可能
+
+### プロジェクト構成
+
+```
+reqs-builder/
+  package.json
+  tsconfig.json
+  src/
+    cli.ts                # エントリポイント
+    commands/
+      validate.ts         # reqs-builder validate
+      generate.ts         # reqs-builder generate
+      dev.ts              # reqs-builder dev (統合起動)
+      mcp-server.ts       # reqs-builder mcp-server（将来）
+    lib/
+      hash.ts             # ディレクトリハッシュ計算
+      yaml-loader.ts      # YAML 読み込み
+      schema-validator.ts # 参照整合性チェック
+      template-engine.ts  # Nunjucks ラッパー
+```
 
 ## テンプレート仕様
 
@@ -274,47 +303,46 @@ entities:
 
 #### Read（クエリ）
 
-```python
-def query(jsonpath: str) -> list[dict]:
-    """
-    JSONPath でデータを取得
-    例: query("$.screens[?@.entity_ref=='User']")
-    """
+```typescript
+function query(jsonpath: string): unknown[];
+// 例: query("$.screens[?@.entity_ref=='User']")
 ```
 
 #### Create/Update/Delete（ミューテーション）
 
 JSON Patch の `op` と JSONPath の `path` を組み合わせた方式：
 
-```python
-def mutate(operations: list[Operation]) -> Result:
-    """
-    operations: [
-      { "op": "add", "path": "<JSONPath>", "value": <any> },
-      { "op": "replace", "path": "<JSONPath>", "value": <any> },
-      { "op": "remove", "path": "<JSONPath>" }
-    ]
+```typescript
+interface Operation {
+  op: 'add' | 'replace' | 'remove';
+  path: string;  // JSONPath
+  value?: unknown;  // remove 時は不要
+}
 
-    例:
-    # 追加
-    { "op": "add", "path": "$.screens", "value": { "id": "customer-list", "name": "お客様一覧", "entity_ref": "User" } }
+function mutate(operations: Operation[]): MutateResult;
 
-    # 更新
-    { "op": "replace", "path": "$.screens[?@.id=='customer-list'].name", "value": "顧客一覧画面" }
+// 例:
+// 追加
+{ op: "add", path: "$.screens", value: { id: "customer-list", name: "お客様一覧", entity_ref: "User" } }
 
-    # 削除
-    { "op": "remove", "path": "$.screens[?@.id=='customer-list']" }
-    """
+// 更新
+{ op: "replace", path: "$.screens[?@.id=='customer-list'].name", value: "顧客一覧画面" }
+
+// 削除
+{ op: "remove", path: "$.screens[?@.id=='customer-list']" }
 ```
 
 #### 検証
 
-```python
-def validate() -> list[Error]:
-    """
-    全データの参照整合性をチェック
-    mutate() は内部で自動的に検証を実行し、エラー時はロールバック
-    """
+```typescript
+interface ValidationError {
+  path: string;
+  message: string;
+  code: string;
+}
+
+function validate(): ValidationError[];
+// mutate() は内部で自動的に検証を実行し、エラー時はロールバック
 ```
 
 ### 設計判断
