@@ -94,27 +94,30 @@ my-project/
 
 ### Roadmap
 
-#### Phase 1: 最小限の動作確認
+#### Phase 1: 出力確認環境
 
-1. スキーマ定義（YAML）のパース
-2. データ（YAML）の読み込みと参照整合性チェック
-3. レポート定義の読み込みと単一テンプレートからの Markdown 生成
+1. MkDocs セットアップ
 
-#### Phase 2: 実用機能
+#### Phase 2: Generator
 
-4. レポートの入れ子（children）処理
-5. foreach による複数出力の連結
-6. 標準テンプレート（ER図、DFD、CRUDマトリクス）
-7. テンプレートオーバライド
-8. JSONPath フィルタ
+2. 単一テンプレートから Markdown 生成（ダミーデータで）
+3. ファイル監視と統合起動コマンド（reqs-builder dev）
+4. データ（YAML）の読み込み
+5. レポート定義の読み込み
+6. レポートの入れ子（children）処理
+7. foreach による複数出力の連結
+8. 標準テンプレート（ER図、DFD、CRUDマトリクス）
+9. テンプレートオーバライド
+10. JSONPath フィルタ（テンプレート内での複雑なクエリ）
 
-#### Phase 3: 統合
+#### Phase 3: Validator
 
-9. MkDocs / AsciiDoctor 連携
-10. MCP サーバ対応
-11. CLI の整備
+11. スキーマ定義（YAML）のパースと参照整合性チェック
+12. 検証結果ファイル（.validation-result.yaml）の生成
+13. ファイル監視（schema/data → Validator、validation-result → Generator）
 
 #### 将来
 
+- MCP サーバ対応
 - 多言語スキーマ生成（Zod ↔ Pydantic）
 - FP 法計測の自動化（要件定義ユースケース向け）
