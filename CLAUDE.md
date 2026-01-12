@@ -1,24 +1,13 @@
 # Structured Document Generator
 
-## プロジェクト概要
+## Overview
 
 任意の関連するオブジェクト群とドキュメントテンプレートから、整合性の取れた構造的ドキュメントを生成する汎用ツール。
 
-詳細: [docs/product.md](docs/product.md)
+- 製品ビジョン: [docs/product.md](docs/product.md)
+- アーキテクチャ: [docs/architecture.md](docs/architecture.md)
 
-## アーキテクチャ
-
-Validator と Generator を疎結合にし、検証結果ファイル（.validation-result.yaml）を介して連携する。
-
-詳細: [docs/architecture.md](docs/architecture.md)
-
-## スキーマ定義
-
-OpenAPI/JSON Schema 互換 + `x-ref` 拡張で外部キー参照を表現する。
-
-詳細: [docs/specs/schema-spec.md](docs/specs/schema-spec.md)
-
-## 技術スタック
+## Technical Stack
 
 - **言語: TypeScript**
 - ランタイム: Node.js
@@ -38,7 +27,9 @@ OpenAPI/JSON Schema 互換 + `x-ref` 拡張で外部キー参照を表現する�
 - **AI との協調**: 型定義が「仕様書」として機能し、Claude Code がコードの意図を理解しやすい
 - **Nunjucks**: 11ty でも使われている実績、Jinja2 互換で知識流用可能
 
-### プロジェクト構成
+## Project Structure
+
+### アプリケーション構成
 
 ```
 reqs-builder/
@@ -85,40 +76,31 @@ my-project/
     entities.md
 ```
 
-## Reports 仕様
+## Specifications
 
-`reports/` ディレクトリに「出力単位の定義」を配置する。レポートは入れ子構造（children）と foreach による複数出力をサポート。
+- スキーマ定義: [docs/specs/schema-spec.md](docs/specs/schema-spec.md)
+- レポート仕様: [docs/specs/reports-spec.md](docs/specs/reports-spec.md)
+- テンプレート仕様: [docs/specs/template-spec.md](docs/specs/template-spec.md)
+- API設計（将来）: [docs/specs/api-design.md](docs/specs/api-design.md)
 
-詳細: [docs/specs/reports-spec.md](docs/specs/reports-spec.md)
+## Development
 
-## テンプレート仕様
-
-Nunjucks + JSONPath によるテンプレートエンジン。ユーザ定義テンプレートによるオーバーライドをサポート。
-
-詳細: [docs/specs/template-spec.md](docs/specs/template-spec.md)
-
-## MCP サーバ / CLI（将来）
-
-CLI と MCP サーバの両方で同一機能を提供。JSONPath + Patch 方式による汎用 CRUD API。
-
-詳細: [docs/specs/api-design.md](docs/specs/api-design.md)
-
-## 開発方針
+### 開発方針
 
 1. **既存ツールを最大限活用** - 車輪の再発明を避ける
 2. **スキーマ定義は言語非依存な資産** - YAML/JSON Schema として Git 管理
 3. **周辺ツールは差し替え可能に** - 出力形式、プレビューツール等は疎結合に
 4. **クエリ構文は JSONPath に統一** - CLI、テンプレート、MCP で一貫性
 
-## 実装優先順位
+### Roadmap
 
-### Phase 1: 最小限の動作確認
+#### Phase 1: 最小限の動作確認
 
 1. スキーマ定義（YAML）のパース
 2. データ（YAML）の読み込みと参照整合性チェック
 3. レポート定義の読み込みと単一テンプレートからの Markdown 生成
 
-### Phase 2: 実用機能
+#### Phase 2: 実用機能
 
 4. レポートの入れ子（children）処理
 5. foreach による複数出力の連結
@@ -126,13 +108,13 @@ CLI と MCP サーバの両方で同一機能を提供。JSONPath + Patch 方式
 7. テンプレートオーバライド
 8. JSONPath フィルタ
 
-### Phase 3: 統合
+#### Phase 3: 統合
 
 9. MkDocs / AsciiDoctor 連携
 10. MCP サーバ対応
 11. CLI の整備
 
-### 将来
+#### 将来
 
 - 多言語スキーマ生成（Zod ↔ Pydantic）
 - FP 法計測の自動化（要件定義ユースケース向け）
