@@ -131,47 +131,9 @@ wait
 
 ## スキーマ定義
 
-OpenAPI/JSON Schema 互換 + `x-ref` 拡張で外部キー参照を表現：
+OpenAPI/JSON Schema 互換 + `x-ref` 拡張で外部キー参照を表現する。
 
-```yaml
-components:
-  schemas:
-    Entity:
-      type: object
-      required: [id, name]
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-
-    DataStore:
-      type: object
-      required: [id, entity_ref]
-      properties:
-        id:
-          type: string
-        entity_ref:
-          type: string
-          x-ref:
-            target: Entity
-            field: id
-```
-
-### 設計判断
-
-- **OpenAPI/JSON Schema ベースを採用した理由**
-  - 業界標準、ドキュメント豊富
-  - 各言語への型生成ツールが既存（Python/Pydantic, TypeScript/Zod 等）
-  - `x-` プレフィックスで独自拡張可能（既存ツールは無視するだけ）
-
-- **データストア方針**
-  - 最初は参照チェックのみ（インメモリで十分）
-  - クエリは JSONPath で対応
-  - 複雑な JOIN・集計が必要になったら SQLite 導入を検討
-  - GraphQL は実装コストが高いため見送り
+詳細: [docs/specs/schema-spec.md](docs/specs/schema-spec.md)
 
 ## 技術スタック
 
