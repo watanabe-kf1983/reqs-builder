@@ -16,7 +16,7 @@
 - テンプレート: Nunjucks
 - クエリ: jsonpath-plus
 - ディレクトリハッシュ: folder-hash
-- ファイル監視: chokidar（または外部ツール watchexec）
+- ファイル監視: chokidar
 - ドキュメントプレビュー: MkDocs または AsciiDoctor
 
 ### TypeScript を選択した理由
