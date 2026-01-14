@@ -2,6 +2,21 @@
 
 テンプレートの仕様。見た目（純粋な表示ロジック）を定義する。
 
+## Pagination（複数ファイル生成）
+
+コレクションの各要素から個別のファイルを生成する機能。
+11ty-like なフロントマターで定義する。
+
+```jinja2
+---
+foreach: entities
+path: "docs/entities/{{ id }}.md"
+---
+# {{ name }}
+
+{{ description }}
+```
+
 ## データアクセス
 
 **JSONPath を統一的なクエリ構文として採用：**
