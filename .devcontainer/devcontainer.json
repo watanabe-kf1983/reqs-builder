@@ -1,0 +1,28 @@
+{
+  "name": "reqs-builder",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bookworm",
+
+  "features": {},
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "anthropic.claude-code",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "editorconfig.editorconfig",
+        "redhat.vscode-yaml",
+        "bierner.markdown-mermaid",
+        "ronnidc.nunjucks"
+      ]
+    }
+  },
+
+  "mounts": [
+    "source=reqs-builder-claude-${devcontainerId},target=/home/node/.claude,type=volume"
+  ],
+
+  "postCreateCommand": "sudo chown -R node:node /home/node/.claude && npm install -g @anthropic-ai/claude-code",
+
+  "remoteUser": "node"
+}
