@@ -128,7 +128,7 @@ my-project/
 #### Phase 1: 出力確認環境
 
 - [x] 1-1. 統合起動コマンドの作成（reqs-builder dev）
-- [ ] 1-2. Hugo セットアップ (hugo-bin)
+- [x] 1-2. Hugo セットアップ (hugo-bin)
 
 #### Phase 2: Generator
 
