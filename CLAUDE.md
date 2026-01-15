@@ -4,8 +4,8 @@
 
 任意の関連するオブジェクト群とドキュメントテンプレートから、整合性の取れた構造的ドキュメントを生成する汎用ツール。
 
-- 製品ビジョン: [docs/product.md](docs/product.md)
-- アーキテクチャ: [docs/architecture.md](docs/architecture.md)
+- 製品ビジョン: [docs/internal/product.md](docs/internal/product.md)
+- アーキテクチャ: [docs/internal/architecture.md](docs/internal/architecture.md)
 
 ## Technical Stack
 
@@ -93,10 +93,16 @@ my-project/
 
 ## Specifications
 
-- スキーマ定義: [docs/specs/schema-spec.md](docs/specs/schema-spec.md)
-- レポート仕様: [docs/specs/reports-spec.md](docs/specs/reports-spec.md)
-- テンプレート仕様: [docs/specs/template-spec.md](docs/specs/template-spec.md)
-- API設計（将来）: [docs/specs/api-design.md](docs/specs/api-design.md)
+### アプリケーション仕様（テストの入力）
+
+- 設定システム: [docs/specs/config.spec.md](docs/specs/config.spec.md)
+
+### ユーザ向けファイルフォーマット仕様
+
+- スキーマ定義: [docs/user-guide/schema-spec.md](docs/user-guide/schema-spec.md)
+- レポート仕様: [docs/user-guide/reports-spec.md](docs/user-guide/reports-spec.md)
+- テンプレート仕様: [docs/user-guide/template-spec.md](docs/user-guide/template-spec.md)
+- API設計（将来）: [docs/user-guide/api-design.md](docs/user-guide/api-design.md)
 
 ## Development
 
