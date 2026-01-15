@@ -17,7 +17,7 @@
 - クエリ: jsonpath-plus
 - ディレクトリハッシュ: folder-hash
 - ファイル監視: chokidar
-- ドキュメントプレビュー: MkDocs または AsciiDoctor
+- ドキュメントプレビュー: Hugo (hugo-bin 経由)
 
 ### TypeScript を選択した理由
 
@@ -26,6 +26,21 @@
 - **単一パッケージで CLI + MCP**: Node の `bin` フィールドで CLI、MCP SDK も npm で導入可能
 - **AI との協調**: 型定義が「仕様書」として機能し、Claude Code がコードの意図を理解しやすい
 - **Nunjucks**: 11ty でも使われている実績、Jinja2 互換で知識流用可能
+
+### Hugo を選択した理由
+
+- **Node.js で完結**: hugo-bin により `npm install` 時にバイナリ自動取得、Python/Ruby 不要
+- **高速**: Go 製シングルバイナリ、大量ファイルでも高速ビルド
+- **ライブリロード**: `hugo server` で変更を即座にブラウザ反映
+- **静的エクスポート**: `hugo` コマンドで HTML 一式を出力、ポータブルに配布可能
+- **Mermaid 対応**: ER図、シーケンス図、フローチャート等を描画可能
+- **将来**: AsciiDoc プレビュー環境への差し替えも検討（Asciidoctor.js または外部サーバ連携）
+
+### 図表記の方針
+
+- 基本: Mermaid（ER図、シーケンス図、フローチャート等）
+- Mermaid 非対応の図（ユースケース図等）は代替記法で対応
+- 将来: PlantUML 対応を検討（Java 依存のため優先度低）
 
 ## Project Structure
 
@@ -96,7 +111,7 @@ my-project/
 
 #### Phase 1: 出力確認環境
 
-1. MkDocs セットアップ
+1. Hugo セットアップ (hugo-bin)
 
 #### Phase 2: Generator
 
