@@ -107,29 +107,39 @@ my-project/
 3. **周辺ツールは差し替え可能に** - 出力形式、プレビューツール等は疎結合に
 4. **クエリ構文は JSONPath に統一** - CLI、テンプレート、MCP で一貫性
 
+### テスト方針
+
+- **テスト対象**: `src/lib/` 配下のビジネスロジック
+- **カバレッジ目標**: 85%以上
+- **アプローチ**: テストファースト（TDD）を予定
+- **対象外**: `src/cli.ts`, `src/commands/` - CLIフレームワーク（commander）への設定層のため
+
 ### Roadmap
+
+各タスクは「1タスク・1 Git ブランチ・1 Claude Code セッション」で進める。完了したらチェックを入れてmainにマージ。
 
 #### Phase 1: 出力確認環境
 
-1. Hugo セットアップ (hugo-bin)
+- [x] 1. 統合起動コマンドの作成（reqs-builder dev）
+- [ ] 2. Hugo セットアップ (hugo-bin)
 
 #### Phase 2: Generator
 
-2. 単一テンプレートから Markdown 生成（ダミーデータで）
-3. ファイル監視と統合起動コマンド（reqs-builder dev）
-4. データ（YAML）の読み込み
-5. レポート定義の読み込み
-6. レポートの入れ子（children）処理
-7. foreach による複数出力の連結
-8. 標準テンプレート（ER図、DFD、CRUDマトリクス）
-9. テンプレートオーバライド
-10. JSONPath フィルタ（テンプレート内での複雑なクエリ）
+- [ ] 3. 単一テンプレートから Markdown 生成（ダミーデータで）
+- [ ] 4. ファイル監視機能の追加
+- [ ] 5. データ（YAML）の読み込み
+- [ ] 6. レポート定義の読み込み
+- [ ] 7. レポートの入れ子（children）処理
+- [ ] 8. foreach による複数出力の連結
+- [ ] 9. 標準テンプレート（ER図、DFD、CRUDマトリクス）
+- [ ] 10. テンプレートオーバライド
+- [ ] 11. JSONPath フィルタ（テンプレート内での複雑なクエリ）
 
 #### Phase 3: Validator
 
-11. スキーマ定義（YAML）のパースと参照整合性チェック
-12. 検証結果ファイル（.validation-result.yaml）の生成
-13. ファイル監視（schema/data → Validator、validation-result → Generator）
+- [ ] 12. スキーマ定義（YAML）のパースと参照整合性チェック
+- [ ] 13. 検証結果ファイル（.validation-result.yaml）の生成
+- [ ] 14. ファイル監視（schema/data → Validator、validation-result → Generator）
 
 #### 将来
 
