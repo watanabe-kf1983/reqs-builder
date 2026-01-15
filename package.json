@@ -1,0 +1,43 @@
+{
+  "name": "reqs-builder",
+  "version": "0.1.0",
+  "description": "任意の関連オブジェクト群から整合性の取れた構造的ドキュメントを生成する汎用ツール。",
+  "main": "dist/cli.js",
+  "bin": {
+    "reqs-builder": "dist/cli.js"
+  },
+  "type": "module",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "documentation",
+    "requirements",
+    "template",
+    "generator"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "zod": "^3.24.1",
+    "js-yaml": "^4.1.0",
+    "nunjucks": "^3.2.4",
+    "jsonpath-plus": "^10.3.0",
+    "folder-hash": "^4.0.4",
+    "chokidar": "^4.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.12",
+    "@types/js-yaml": "^4.0.9",
+    "@types/nunjucks": "^3.2.6",
+    "typescript": "^5.7.3"
+  }
+}
