@@ -23,7 +23,9 @@ reqs-builder の設定システムの振る舞いを定義する。
 ```json
 {
   "output": {
-    "dir": "./build"
+    "doc": {
+      "dir": "./build"
+    }
   }
 }
 ```
@@ -36,6 +38,6 @@ reqs-builder の設定システムの振る舞いを定義する。
 
 | キー | 型 | デフォルト | 環境変数 | 説明 |
 |------|-----|---------|----------|------|
-| `output.dir` | string | `./docs` | `STDG_OUTPUT_DIR` | Generator の出力先ディレクトリ |
-| `preview.hugo.*` | object | `{}` | (なし) | hugo-bin に渡すオプション（設定ファイルのみ）（未実装） |
-| `preview.customServer.command` | string | (なし) | `STDG_PREVIEW_CUSTOM_SERVER_COMMAND` | カスタムプレビューサーバのコマンド。設定時は hugo-bin の代わりに使用（未実装：AsciiDoc対応時に実装予定） |
+| `output.doc.dir` | string | `./docs` | `STDG_OUTPUT_DOC_DIR` | Generator の出力先ディレクトリ |
+| `render.hugo.*` | object | `{}` | (なし) | hugo-bin に渡すオプション（設定ファイルのみ）（未実装） |
+| `render.customServer.command` | string | (なし) | `STDG_RENDER_CUSTOM_SERVER_COMMAND` | カスタムレンダリングサーバのコマンド。設定時は hugo-bin の代わりに使用（未実装：AsciiDoc対応時に実装予定） |
