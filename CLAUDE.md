@@ -86,9 +86,10 @@ my-project/
     entities-chapter.yaml
   templates/              # ユーザ定義テンプレート（オーバーライド用）
     entities-chapter.md.j2
-  docs/                   # 出力先（生成される）
-    system-overview.md
-    entities.md
+  output/                 # 出力先（生成される）
+    docs/                 # Generator が生成した Markdown
+      system-overview.md
+      entities.md
 ```
 
 ## Specifications

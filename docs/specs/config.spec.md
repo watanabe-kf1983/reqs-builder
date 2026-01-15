@@ -38,6 +38,7 @@ reqs-builder の設定システムの振る舞いを定義する。
 
 | キー | 型 | デフォルト | 環境変数 | 説明 |
 |------|-----|---------|----------|------|
-| `output.doc.dir` | string | `./docs` | `STDG_OUTPUT_DOC_DIR` | Generator の出力先ディレクトリ |
+| `output.doc.dir` | string | `./output/docs` | `STDG_OUTPUT_DOC_DIR` | Generator の出力先ディレクトリ |
+| `output.rendered.dir` | string | `./output/rendered` | `STDG_OUTPUT_RENDERED_DIR` | レンダリング結果（HTML）の出力先ディレクトリ |
 | `render.hugo.*` | object | `{}` | (なし) | hugo-bin に渡すオプション（設定ファイルのみ）（未実装） |
 | `render.customServer.command` | string | (なし) | `STDG_RENDER_CUSTOM_SERVER_COMMAND` | カスタムレンダリングサーバのコマンド。設定時は hugo-bin の代わりに使用（未実装：AsciiDoc対応時に実装予定） |
