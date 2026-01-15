@@ -116,6 +116,8 @@ my-project/
 
 ### Roadmap
 
+各タスクは「1タスク・1 Git ブランチ・1 Claude Code セッション」で進める。完了したらチェックを入れてmainにマージ。
+
 #### Phase 1: 出力確認環境
 
 - [x] 1. 統合起動コマンドの作成（reqs-builder dev）
