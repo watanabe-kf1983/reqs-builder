@@ -111,25 +111,26 @@ my-project/
 
 #### Phase 1: 出力確認環境
 
-1. Hugo セットアップ (hugo-bin)
+1. 統合起動コマンドの作成（reqs-builder dev）
+2. Hugo セットアップ (hugo-bin)
 
 #### Phase 2: Generator
 
-2. 単一テンプレートから Markdown 生成（ダミーデータで）
-3. ファイル監視と統合起動コマンド（reqs-builder dev）
-4. データ（YAML）の読み込み
-5. レポート定義の読み込み
-6. レポートの入れ子（children）処理
-7. foreach による複数出力の連結
-8. 標準テンプレート（ER図、DFD、CRUDマトリクス）
-9. テンプレートオーバライド
-10. JSONPath フィルタ（テンプレート内での複雑なクエリ）
+3. 単一テンプレートから Markdown 生成（ダミーデータで）
+4. ファイル監視機能の追加
+5. データ（YAML）の読み込み
+6. レポート定義の読み込み
+7. レポートの入れ子（children）処理
+8. foreach による複数出力の連結
+9. 標準テンプレート（ER図、DFD、CRUDマトリクス）
+10. テンプレートオーバライド
+11. JSONPath フィルタ（テンプレート内での複雑なクエリ）
 
 #### Phase 3: Validator
 
-11. スキーマ定義（YAML）のパースと参照整合性チェック
-12. 検証結果ファイル（.validation-result.yaml）の生成
-13. ファイル監視（schema/data → Validator、validation-result → Generator）
+12. スキーマ定義（YAML）のパースと参照整合性チェック
+13. 検証結果ファイル（.validation-result.yaml）の生成
+14. ファイル監視（schema/data → Validator、validation-result → Generator）
 
 #### 将来
 
