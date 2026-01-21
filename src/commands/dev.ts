@@ -23,7 +23,7 @@ const configSchema = convict({
   },
 });
 
-export type Config = {
+export interface Config {
   output: {
     doc: {
       dir: string;
@@ -32,7 +32,7 @@ export type Config = {
       dir: string;
     };
   };
-};
+}
 
 export function loadConfig(): Config {
   configSchema.validate({ allowed: 'strict' });
@@ -65,6 +65,8 @@ export async function devCommand(): Promise<void> {
     process.exit(0);
   });
 
-  // Keep the process running
-  await new Promise(() => {});
+  // Keep the process running indefinitely
+  await new Promise<never>(() => {
+    // Intentionally never resolves - process exits via signal handlers
+  });
 }
