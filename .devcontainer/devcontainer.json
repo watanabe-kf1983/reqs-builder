@@ -21,9 +21,7 @@
     }
   },
 
-  "mounts": [
-    "source=reqs-builder-claude-${devcontainerId},target=/home/node/.claude,type=volume"
-  ],
+  "mounts": ["source=reqs-builder-claude-${devcontainerId},target=/home/node/.claude,type=volume"],
 
   "postCreateCommand": "sudo chown -R node:node /home/node/.claude && npm install -g @anthropic-ai/claude-code",
 

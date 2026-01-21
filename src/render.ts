@@ -19,12 +19,18 @@ export function startRenderServer(options: RenderServerOptions): ChildProcess {
 
   const args = [
     'server',
-    '--config', defaultHugoConfig,
-    '--layoutDir', defaultLayoutDir,
-    '--source', sourceDir,
-    '--destination', destinationDir,
-    '--port', String(port),
-    '--bind', '0.0.0.0',
+    '--config',
+    defaultHugoConfig,
+    '--layoutDir',
+    defaultLayoutDir,
+    '--source',
+    sourceDir,
+    '--destination',
+    destinationDir,
+    '--port',
+    String(port),
+    '--bind',
+    '0.0.0.0',
     '--disableFastRender',
   ];
 

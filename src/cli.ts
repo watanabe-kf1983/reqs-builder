@@ -10,9 +10,6 @@ program
   .description('任意の関連オブジェクト群から整合性の取れた構造的ドキュメントを生成する汎用ツール')
   .version('0.1.0');
 
-program
-  .command('dev')
-  .description('Start development server')
-  .action(devCommand);
+program.command('dev').description('Start development server').action(devCommand);
 
 program.parse();

@@ -14,7 +14,9 @@
     "build": "tsc && cp -r src/templates dist/",
     "dev": "tsc --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "ci": "npm run build"
+    "format": "prettier --write \"src/**/*\"",
+    "format:check": "prettier --check \"src/**/*\"",
+    "ci": "npm run format:check && npm run build"
   },
   "keywords": [
     "documentation",
@@ -43,6 +45,7 @@
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^24.10.9",
     "@types/nunjucks": "^3.2.6",
+    "prettier": "^3.8.0",
     "typescript": "^5.7.3"
   }
 }
