@@ -13,7 +13,8 @@
         "editorconfig.editorconfig",
         "redhat.vscode-yaml",
         "bierner.markdown-mermaid",
-        "ronnidc.nunjucks"
+        "ronnidc.nunjucks",
+        "github.vscode-github-actions"
       ]
     }
   },
