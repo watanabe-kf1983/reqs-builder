@@ -25,7 +25,7 @@
   "author": "",
   "license": "MIT",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=24.0.0"
   },
   "dependencies": {
     "chokidar": "^3.6.0",
@@ -41,7 +41,7 @@
   "devDependencies": {
     "@types/convict": "^6.1.6",
     "@types/js-yaml": "^4.0.9",
-    "@types/node": "^20.17.12",
+    "@types/node": "^24.10.9",
     "@types/nunjucks": "^3.2.6",
     "typescript": "^5.7.3"
   }
