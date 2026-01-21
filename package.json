@@ -13,7 +13,8 @@
   "scripts": {
     "build": "tsc && cp -r src/templates dist/",
     "dev": "tsc --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ci": "npm run build"
   },
   "keywords": [
     "documentation",
