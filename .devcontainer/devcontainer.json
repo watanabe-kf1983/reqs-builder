@@ -2,7 +2,9 @@
   "name": "reqs-builder",
   "image": "mcr.microsoft.com/devcontainers/typescript-node:4-24",
 
-  "features": {},
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
 
   "customizations": {
     "vscode": {
