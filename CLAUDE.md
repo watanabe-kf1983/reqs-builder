@@ -132,7 +132,7 @@ my-project/
 
 #### Phase 2: Generator
 
-- [ ] 2-1. GitHub Actions 導入（テスト・カバレッジ必須化、main保護）
+- [x] 2-1. GitHub Actions 導入（テスト・カバレッジ必須化、main保護）
 - [ ] 2-2. 単一テンプレートから Markdown 生成（ダミーデータで）
 - [ ] 2-3. ファイル監視機能の追加
 - [ ] 2-4. データ（YAML）の読み込み
