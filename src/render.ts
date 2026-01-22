@@ -14,40 +14,59 @@ export interface RenderServerOptions {
   port?: number;
 }
 
-export function startRenderServer(options: RenderServerOptions): ChildProcess {
+export interface RenderServer {
+  start: () => void;
+  stop: () => void;
+}
+
+export function createRenderServer(options: RenderServerOptions): RenderServer {
   const { sourceDir, destinationDir, port = 1313 } = options;
 
-  const args = [
-    'server',
-    '--config',
-    defaultHugoConfig,
-    '--layoutDir',
-    defaultLayoutDir,
-    '--source',
-    sourceDir,
-    '--destination',
-    destinationDir,
-    '--port',
-    String(port),
-    '--bind',
-    '0.0.0.0',
-    '--disableFastRender',
-  ];
+  let hugo: ChildProcess | null = null;
 
-  const hugo = spawn(hugoPath, args, {
-    stdio: 'inherit',
-  });
+  const start = () => {
+    if (hugo) return;
 
-  hugo.on('error', (err) => {
-    console.error('Failed to start Hugo server:', err.message);
-  });
+    const args = [
+      'server',
+      '--config',
+      defaultHugoConfig,
+      '--layoutDir',
+      defaultLayoutDir,
+      '--source',
+      sourceDir,
+      '--destination',
+      destinationDir,
+      '--port',
+      String(port),
+      '--bind',
+      '0.0.0.0',
+      '--disableFastRender',
+    ];
 
-  hugo.on('exit', () => {
-    const lockFile = join(sourceDir, '.hugo_build.lock');
-    unlink(lockFile).catch(() => {
-      // Ignore errors (file may not exist)
+    hugo = spawn(hugoPath, args, {
+      stdio: 'inherit',
     });
-  });
 
-  return hugo;
+    hugo.on('error', (err) => {
+      console.error('Failed to start Hugo server:', err.message);
+    });
+
+    hugo.on('exit', () => {
+      const lockFile = join(sourceDir, '.hugo_build.lock');
+      unlink(lockFile).catch(() => {
+        // Ignore errors (file may not exist)
+      });
+      hugo = null;
+    });
+  };
+
+  const stop = () => {
+    if (hugo) {
+      hugo.kill();
+      hugo = null;
+    }
+  };
+
+  return { start, stop };
 }

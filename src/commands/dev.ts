@@ -1,6 +1,6 @@
 import convict from 'convict';
 import { resolve } from 'path';
-import { startRenderServer } from '../render.js';
+import { createRenderServer } from '../render.js';
 
 const configSchema = convict({
   output: {
@@ -52,16 +52,17 @@ export async function devCommand(): Promise<void> {
   console.log(`  Rendered output directory: ${destinationDir}`);
   console.log('');
 
-  const hugo = startRenderServer({ sourceDir, destinationDir });
+  const renderServer = createRenderServer({ sourceDir, destinationDir });
+  renderServer.start();
 
   process.on('SIGINT', () => {
     console.log('\nShutting down...');
-    hugo.kill();
+    renderServer.stop();
     process.exit(0);
   });
 
   process.on('SIGTERM', () => {
-    hugo.kill();
+    renderServer.stop();
     process.exit(0);
   });
 
