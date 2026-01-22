@@ -1,0 +1,56 @@
+import convict from 'convict';
+
+const configSchema = convict({
+  data: {
+    dir: {
+      doc: 'Data directory',
+      format: String,
+      default: './data',
+      env: 'STDG_DATA_DIR',
+    },
+  },
+  templates: {
+    dir: {
+      doc: 'Templates directory',
+      format: String,
+      default: './templates',
+      env: 'STDG_TEMPLATES_DIR',
+    },
+  },
+  output: {
+    doc: {
+      dir: {
+        doc: 'Generator output directory',
+        format: String,
+        default: './output/docs',
+        env: 'STDG_OUTPUT_DOC_DIR',
+      },
+    },
+    rendered: {
+      dir: {
+        doc: 'Rendered output directory',
+        format: String,
+        default: './output/rendered',
+        env: 'STDG_OUTPUT_RENDERED_DIR',
+      },
+    },
+  },
+});
+
+export interface Config {
+  data: { dir: string };
+  templates: { dir: string };
+  output: {
+    doc: { dir: string };
+    rendered: { dir: string };
+  };
+}
+
+export function loadConfig(): Config {
+  configSchema.validate({ allowed: 'strict' });
+  return configSchema.getProperties() as Config;
+}
+
+export function withConfig<T>(fn: (config: Config) => T): () => T {
+  return () => fn(loadConfig());
+}

@@ -139,6 +139,13 @@ my-project/
 - **関数型スタイルを優先**: `let` + `for` ループより `map/filter/reduce` を使う
 - **命名はモジュール名に合わせる**: `data-loader` モジュールなら `isDataFile`, `loadDataFile`
 
+#### 言語
+
+- **コード内コメント**: 英語
+- **コミットメッセージ**: 英語
+- **プルリクエスト**: 英語
+- **ドキュメント（CLAUDE.md 等）**: 日本語
+
 ### コミット前チェック
 
 - **`npm run ci`** を実行してからコミット（format, lint, secretlint, build, test:coverage）
