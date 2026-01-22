@@ -15,6 +15,6 @@ export default defineConfig(
     },
   },
   {
-    ignores: ['dist/', 'node_modules/', 'src/templates/', 'eslint.config.js'],
+    ignores: ['dist/', 'node_modules/', 'src/templates/', 'eslint.config.js', 'vitest.config.ts'],
   }
 );

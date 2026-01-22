@@ -4,8 +4,8 @@ node_modules/
 # Build output
 dist/
 
-# Test coverage
-coverage/
+# Test & quality reports
+reports/
 
 # Claude Code local settings
 .claude/settings.local.json
