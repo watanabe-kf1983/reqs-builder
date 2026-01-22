@@ -9,7 +9,7 @@ export default defineConfig({
     },
     coverage: {
       provider: 'v8',
-      include: ['src/lib/**/*.ts'],
+      include: ['src/core/**/*.ts'],
       reportsDirectory: 'reports/coverage',
       thresholds: {
         lines: 85,

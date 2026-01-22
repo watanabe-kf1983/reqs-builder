@@ -57,7 +57,7 @@ reqs-builder/
       generate.ts         # reqs-builder generate
       dev.ts              # reqs-builder dev (統合起動)
       mcp-server.ts       # reqs-builder mcp-server（将来）
-    lib/
+    core/
       hash.ts             # ディレクトリハッシュ計算
       data-loader.ts      # データYAML読み込み・マージ
       schema-validator.ts # 参照整合性チェック
@@ -116,7 +116,7 @@ my-project/
 
 ### テスト方針
 
-- **テスト対象**: `src/lib/` 配下のビジネスロジック
+- **テスト対象**: `src/core/` 配下のビジネスロジック
 - **カバレッジ目標**: 85%以上
 - **アプローチ**: テストファースト（TDD）を予定
 - **対象外**: `src/cli.ts`, `src/commands/` - CLIフレームワーク（commander）への設定層のため
