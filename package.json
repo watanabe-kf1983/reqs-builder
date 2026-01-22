@@ -54,6 +54,7 @@
     "@types/node": "^24.10.9",
     "@types/nunjucks": "^3.2.6",
     "@vitest/coverage-v8": "^4.0.17",
+    "@vitest/ui": "^4.0.17",
     "eslint": "^9.39.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
