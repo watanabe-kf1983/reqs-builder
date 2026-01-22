@@ -1,69 +1,49 @@
-import convict from 'convict';
 import { resolve } from 'path';
-import { startRenderServer } from '../render.js';
+import { Config } from '../config.js';
+import { createRenderServer } from '../infra/renderer.js';
+import { createWatcher } from '../infra/watcher.js';
+import { generateCommand } from './generate.js';
 
-const configSchema = convict({
-  output: {
-    doc: {
-      dir: {
-        doc: 'Generator の出力先ディレクトリ',
-        format: String,
-        default: './output/docs',
-        env: 'STDG_OUTPUT_DOC_DIR',
-      },
-    },
-    rendered: {
-      dir: {
-        doc: 'レンダリング結果の出力先ディレクトリ',
-        format: String,
-        default: './output/rendered',
-        env: 'STDG_OUTPUT_RENDERED_DIR',
-      },
-    },
-  },
-});
-
-export interface Config {
-  output: {
-    doc: {
-      dir: string;
-    };
-    rendered: {
-      dir: string;
-    };
-  };
-}
-
-export function loadConfig(): Config {
-  configSchema.validate({ allowed: 'strict' });
-  return configSchema.getProperties() as Config;
-}
-
-export async function devCommand(): Promise<void> {
+export async function devCommand(config: Config): Promise<void> {
   console.log('Starting development server...');
   console.log('');
 
-  const config = loadConfig();
-  const sourceDir = resolve(process.cwd(), config.output.doc.dir);
-  const destinationDir = resolve(process.cwd(), config.output.rendered.dir);
+  const dataDir = resolve(process.cwd(), config.data.dir);
+  const templateDir = resolve(process.cwd(), config.templates.dir);
+  const outputDir = resolve(process.cwd(), config.output.doc.dir);
+  const renderedDir = resolve(process.cwd(), config.output.rendered.dir);
 
-  console.log('Configuration:');
-  console.log(`  Document output directory: ${sourceDir}`);
-  console.log(`  Rendered output directory: ${destinationDir}`);
+  // Initial generate
+  generateCommand(config);
   console.log('');
 
-  const hugo = startRenderServer({ sourceDir, destinationDir });
+  // Start file watcher
+  const watcher = createWatcher({
+    paths: [dataDir, templateDir],
+    onChange: () => {
+      generateCommand(config);
+    },
+  });
+  watcher.start();
+  console.log('Watching for changes...');
+  console.log('');
 
-  process.on('SIGINT', () => {
+  // Start Hugo server
+  const renderServer = createRenderServer({
+    sourceDir: outputDir,
+    destinationDir: renderedDir,
+  });
+  await renderServer.start();
+
+  const shutdown = async () => {
     console.log('\nShutting down...');
-    hugo.kill();
+    await watcher.stop();
+    renderServer.stop();
     process.exit(0);
-  });
+  };
 
-  process.on('SIGTERM', () => {
-    hugo.kill();
-    process.exit(0);
-  });
+  process.on('SIGINT', () => void shutdown());
+  process.on('SIGTERM', () => void shutdown());
 
   // Keep the process running indefinitely
   await new Promise<never>(() => {

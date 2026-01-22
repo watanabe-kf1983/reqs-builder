@@ -139,6 +139,13 @@ my-project/
 - **関数型スタイルを優先**: `let` + `for` ループより `map/filter/reduce` を使う
 - **命名はモジュール名に合わせる**: `data-loader` モジュールなら `isDataFile`, `loadDataFile`
 
+#### 言語
+
+- **コード内コメント**: 英語
+- **コミットメッセージ**: 英語
+- **プルリクエスト**: 英語
+- **ドキュメント（CLAUDE.md 等）**: 日本語
+
 ### コミット前チェック
 
 - **`npm run ci`** を実行してからコミット（format, lint, secretlint, build, test:coverage）
@@ -156,7 +163,7 @@ my-project/
 
 - [x] 2-1. GitHub Actions 導入（テスト・カバレッジ必須化、main保護）
 - [x] 2-2. テンプレートエンジン + データYAML読み込み + generate コマンド
-- [ ] 2-3. ファイル監視機能の追加
+- [x] 2-3. ファイル監視機能の追加
 - [ ] 2-4. pagination（複数ファイル生成）
 - [ ] 2-5. レポート定義の読み込み
 - [ ] 2-6. レポートの入れ子（children）処理
