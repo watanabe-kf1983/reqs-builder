@@ -1,7 +1,7 @@
 import { resolve } from 'path';
 import { Config } from '../config.js';
-import { loadDataDir } from '../lib/data-loader.js';
-import { expandTemplateDir } from '../lib/template-expander.js';
+import { loadDataDir } from '../core/data-loader.js';
+import { expandTemplateDir } from '../core/template-expander.js';
 
 export function generateCommand(config: Config): void {
   const dataDir = resolve(process.cwd(), config.data.dir);

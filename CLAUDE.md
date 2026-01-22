@@ -57,16 +57,19 @@ reqs-builder/
       generate.ts         # reqs-builder generate
       dev.ts              # reqs-builder dev (統合起動)
       mcp-server.ts       # reqs-builder mcp-server（将来）
-    lib/
+    core/
       hash.ts             # ディレクトリハッシュ計算
       data-loader.ts      # データYAML読み込み・マージ
       schema-validator.ts # 参照整合性チェック
       report-processor.ts # レポート定義の処理・入れ子展開
       template-expander.ts # テンプレート展開
-    templates/            # 標準テンプレート（アプリ同梱）
+  resources/              # 静的リソース（アプリ同梱）
+    hugo/                 # Hugo 関連
+      hugo.toml           # Hugo 設定
+      layouts/            # Hugo レイアウト
+    (将来) templates/     # 標準テンプレート
       er.md.j2            # Mermaid ER図
       dfd.md.j2           # DFD
-      crud-matrix.md.j2   # CRUDマトリクス
 ```
 
 ### ユーザプロジェクト構成（例）
@@ -116,7 +119,7 @@ my-project/
 
 ### テスト方針
 
-- **テスト対象**: `src/lib/` 配下のビジネスロジック
+- **テスト対象**: `src/core/` 配下のビジネスロジック
 - **カバレッジ目標**: 85%以上
 - **アプローチ**: テストファースト（TDD）を予定
 - **対象外**: `src/cli.ts`, `src/commands/` - CLIフレームワーク（commander）への設定層のため
