@@ -2,11 +2,11 @@
   "hooks": {
     "PostToolUse": [
       {
-        "matcher": "Edit|MultiEdit|Write",
+        "matcher": "Edit|Write",
         "hooks": [
           {
             "type": "command",
-            "command": "if echo \"$CLAUDE_TOOL_INPUT_FILE_PATH\" | grep -qE '^src/.*\\.(ts|js)$'; then npx prettier --write \"$CLAUDE_TOOL_INPUT_FILE_PATH\"; fi"
+            "command": "jq -r '.tool_input.file_path // empty' | xargs -I {} sh -c 'echo \"{}\" | grep -qE \"/src/.*\\.(ts|js)$\" && npx prettier --write \"{}\"'"
           }
         ]
       }
