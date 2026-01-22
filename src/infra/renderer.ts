@@ -1,12 +1,19 @@
 import { spawn, ChildProcess } from 'child_process';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { join } from 'path';
 import { unlink } from 'fs/promises';
 import hugoPath from 'hugo-bin';
+import { packageDirectory } from 'pkg-dir';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const defaultHugoConfig = join(__dirname, 'templates', 'hugo.toml');
-const defaultLayoutDir = join(__dirname, 'templates', 'layouts');
+async function getDefaultPaths() {
+  const pkgRoot = await packageDirectory();
+  if (!pkgRoot) {
+    throw new Error('Could not find package root directory');
+  }
+  return {
+    hugoConfig: join(pkgRoot, 'dist', 'templates', 'hugo.toml'),
+    layoutDir: join(pkgRoot, 'dist', 'templates', 'layouts'),
+  };
+}
 
 export interface RenderServerOptions {
   sourceDir: string;
@@ -15,7 +22,7 @@ export interface RenderServerOptions {
 }
 
 export interface RenderServer {
-  start: () => void;
+  start: () => Promise<void>;
   stop: () => void;
 }
 
@@ -24,15 +31,19 @@ export function createRenderServer(options: RenderServerOptions): RenderServer {
 
   let hugo: ChildProcess | null = null;
 
-  const start = () => {
+  const start = async () => {
     if (hugo) return;
+
+    const { hugoConfig, layoutDir } = await getDefaultPaths();
 
     const args = [
       'server',
       '--config',
-      defaultHugoConfig,
+      hugoConfig,
       '--layoutDir',
-      defaultLayoutDir,
+      layoutDir,
+      '--contentDir',
+      '.',
       '--source',
       sourceDir,
       '--destination',

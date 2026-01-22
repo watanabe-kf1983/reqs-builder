@@ -33,7 +33,7 @@ export async function devCommand(config: Config): Promise<void> {
     sourceDir: outputDir,
     destinationDir: renderedDir,
   });
-  renderServer.start();
+  await renderServer.start();
 
   const shutdown = async () => {
     console.log('\nShutting down...');
