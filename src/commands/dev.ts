@@ -1,6 +1,6 @@
 import convict from 'convict';
 import { resolve } from 'path';
-import { createRenderServer } from '../infra/render.js';
+import { createRenderServer } from '../infra/renderer.js';
 
 const configSchema = convict({
   output: {
