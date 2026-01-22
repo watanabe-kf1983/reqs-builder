@@ -12,11 +12,13 @@ reqs-builder の設定システムの振る舞いを定義する。
 2. 設定ファイル
 3. 環境変数
 
-### 設定ファイル
+### 設定ファイル（未実装）
 
 - ファイル名: `stdg.json`
 - 配置場所: プロジェクトルート
 - 対応フォーマット: JSON
+
+> **Note**: 現在はデフォルト値と環境変数のみ対応。設定ファイル読み込みは未実装。
 
 #### JSON形式の例
 
@@ -38,6 +40,8 @@ reqs-builder の設定システムの振る舞いを定義する。
 
 | キー | 型 | デフォルト | 環境変数 | 説明 |
 |------|-----|---------|----------|------|
+| `data.dir` | string | `./data` | `STDG_DATA_DIR` | データディレクトリ |
+| `templates.dir` | string | `./templates` | `STDG_TEMPLATES_DIR` | テンプレートディレクトリ |
 | `output.doc.dir` | string | `./output/docs` | `STDG_OUTPUT_DOC_DIR` | Generator の出力先ディレクトリ |
 | `output.rendered.dir` | string | `./output/rendered` | `STDG_OUTPUT_RENDERED_DIR` | レンダリング結果（HTML）の出力先ディレクトリ |
 | `render.hugo.*` | object | `{}` | (なし) | hugo-bin に渡すオプション（設定ファイルのみ）（未実装） |

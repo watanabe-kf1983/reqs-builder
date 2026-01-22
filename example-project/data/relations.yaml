@@ -1,0 +1,10 @@
+relations:
+  - from: user
+    to: order
+    cardinality: 1:N
+    description: ユーザーは複数の注文を持つ
+
+  - from: order
+    to: product
+    cardinality: N:M
+    description: 注文は複数の商品を含み、商品は複数の注文に含まれる

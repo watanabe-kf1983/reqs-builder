@@ -1,6 +1,2 @@
-# Hugo artifacts
-output/rendered/
-output/docs/.hugo_build.lock
-
-# TODO: Generator 実装後は output/ 全体を ignore する
-# output/
+# Generated output
+output/
