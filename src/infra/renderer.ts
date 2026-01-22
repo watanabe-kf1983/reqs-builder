@@ -10,8 +10,8 @@ async function getDefaultPaths() {
     throw new Error('Could not find package root directory');
   }
   return {
-    hugoConfig: join(pkgRoot, 'dist', 'templates', 'hugo.toml'),
-    layoutDir: join(pkgRoot, 'dist', 'templates', 'layouts'),
+    hugoConfig: join(pkgRoot, 'dist', 'resources', 'hugo', 'hugo.toml'),
+    layoutDir: join(pkgRoot, 'dist', 'resources', 'hugo', 'layouts'),
   };
 }
 
