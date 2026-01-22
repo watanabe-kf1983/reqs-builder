@@ -2,6 +2,7 @@
 
 import { Command } from 'commander';
 import { devCommand } from './commands/dev.js';
+import { generateCommand } from './commands/generate.js';
 
 const program = new Command();
 
@@ -11,5 +12,10 @@ program
   .version('0.1.0');
 
 program.command('dev').description('Start development server').action(devCommand);
+
+program
+  .command('generate')
+  .description('Generate documents from data and templates')
+  .action(generateCommand);
 
 program.parse();
