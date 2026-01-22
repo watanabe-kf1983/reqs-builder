@@ -13,8 +13,16 @@
   "scripts": {
     "build": "tsc && cp -r src/templates dist/",
     "dev": "tsc --watch",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "ci": "npm run build"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "format": "prettier --write \"src/**/*\"",
+    "format:check": "prettier --check \"src/**/*\"",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "secretlint": "secretlint \"**/*\"",
+    "ci": "npm run format:check && npm run lint && npm run secretlint && npm run build && npm run test:coverage",
+    "prepare": "husky"
   },
   "keywords": [
     "documentation",
@@ -39,10 +47,25 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@secretlint/secretlint-rule-preset-recommend": "^11.3.0",
     "@types/convict": "^6.1.6",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^24.10.9",
     "@types/nunjucks": "^3.2.6",
-    "typescript": "^5.7.3"
+    "@vitest/coverage-v8": "^4.0.17",
+    "eslint": "^9.39.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.8.0",
+    "secretlint": "^11.3.0",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.53.1",
+    "vitest": "^4.0.17"
+  },
+  "lint-staged": {
+    "*": [
+      "secretlint"
+    ]
   }
 }
