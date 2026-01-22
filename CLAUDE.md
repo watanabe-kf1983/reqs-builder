@@ -59,7 +59,7 @@ reqs-builder/
       mcp-server.ts       # reqs-builder mcp-server（将来）
     lib/
       hash.ts             # ディレクトリハッシュ計算
-      yaml-loader.ts      # YAML 読み込み
+      data-loader.ts      # データYAML読み込み・マージ
       schema-validator.ts # 参照整合性チェック
       report-processor.ts # レポート定義の処理・入れ子展開
       template-engine.ts  # Nunjucks ラッパー
@@ -121,6 +121,24 @@ my-project/
 - **アプローチ**: テストファースト（TDD）を予定
 - **対象外**: `src/cli.ts`, `src/commands/` - CLIフレームワーク（commander）への設定層のため
 
+### コーディングスタイル
+
+#### テストフィクスチャ
+
+- **ファイルベース、モジュール隣接型**: `data-loader.fixtures/` のようにテスト対象モジュールの隣に配置
+- 期待値はテストコード内に記述（振る舞いテストの意図を明確にするため）
+
+#### 関数の並び順（Newspaper style）
+
+- **公開API を先頭に**、ヘルパー関数を後に配置
+- ファイルを開いてすぐ主要機能が見える構成
+- ヘルパー関数はパイプラインの順序に沿って配置
+
+#### コードスタイル
+
+- **関数型スタイルを優先**: `let` + `for` ループより `map/filter/reduce` を使う
+- **命名はモジュール名に合わせる**: `data-loader` モジュールなら `isDataFile`, `loadDataFile`
+
 ### Roadmap
 
 各タスクは「1タスク・1 Git ブランチ・1 Claude Code セッション」で進める。完了したらチェックを入れてmainにマージ。
@@ -133,7 +151,7 @@ my-project/
 #### Phase 2: Generator
 
 - [x] 2-1. GitHub Actions 導入（テスト・カバレッジ必須化、main保護）
-- [ ] 2-2. テンプレートエンジン + YAML読み込み + generate コマンド
+- [ ] 2-2. テンプレートエンジン + データYAML読み込み + generate コマンド
 - [ ] 2-3. ファイル監視機能の追加
 - [ ] 2-4. pagination（複数ファイル生成）
 - [ ] 2-5. レポート定義の読み込み
