@@ -39,8 +39,7 @@ function getFiles(dirPath: string): string[] {
     .map((file) => path.join(resolvedPath, file));
 }
 
-const isDataFile = (file: string): boolean =>
-  file.endsWith('.yaml') || file.endsWith('.yml');
+const isDataFile = (file: string): boolean => file.endsWith('.yaml') || file.endsWith('.yml');
 
 /**
  * Load and parse a data file (YAML).

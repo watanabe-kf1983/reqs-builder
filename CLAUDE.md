@@ -62,7 +62,7 @@ reqs-builder/
       data-loader.ts      # データYAML読み込み・マージ
       schema-validator.ts # 参照整合性チェック
       report-processor.ts # レポート定義の処理・入れ子展開
-      template-engine.ts  # Nunjucks ラッパー
+      template-expander.ts # テンプレート展開
     templates/            # 標準テンプレート（アプリ同梱）
       er.md.j2            # Mermaid ER図
       dfd.md.j2           # DFD
@@ -138,6 +138,10 @@ my-project/
 
 - **関数型スタイルを優先**: `let` + `for` ループより `map/filter/reduce` を使う
 - **命名はモジュール名に合わせる**: `data-loader` モジュールなら `isDataFile`, `loadDataFile`
+
+### コミット前チェック
+
+- **`npm run ci`** を実行してからコミット（format, lint, secretlint, build, test:coverage）
 
 ### Roadmap
 
