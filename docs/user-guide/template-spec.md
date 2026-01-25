@@ -34,8 +34,8 @@ Nunjucks のネイティブ構文（`entity.name` 等）も使用可能だが、
 
 ```
 templates/
-  entity-detail.md.j2     # ユーザ定義テンプレート
-  er.md.j2                # 標準テンプレートをオーバーライド
+  entity-detail.md        # ユーザ定義テンプレート
+  er.md                   # 標準テンプレートをオーバーライド
 ```
 
 - 標準テンプレートと同名のファイルを置くとオーバーライド
@@ -114,7 +114,7 @@ relations:
     label: "contains"
 ```
 
-### テンプレート（templates/er.md.j2）
+### テンプレート（templates/er.md）
 
 ```jinja2
 ```mermaid

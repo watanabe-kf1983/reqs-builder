@@ -81,7 +81,7 @@ describe('expandTemplateDir', () => {
 
     try {
       await expect(
-        expandTemplateDir(path.join(fixturesDir, 'entity.md.j2'), {}, outputDir)
+        expandTemplateDir(path.join(fixturesDir, 'entity.md'), {}, outputDir)
       ).rejects.toThrow();
     } finally {
       fs.rmSync(outputDir, { recursive: true, force: true });

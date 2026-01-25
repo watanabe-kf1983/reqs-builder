@@ -1,12 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 import Eleventy from '@11ty/eleventy';
+import nunjucks from 'nunjucks';
 
 /**
  * Expand all template files in a directory and write to output directory.
  * Uses 11ty (Eleventy) for template processing with Nunjucks.
  *
- * @param templateDir - Directory containing template files (*.j2, *.jinja2)
+ * @param templateDir - Directory containing template files (*.md, processed as Nunjucks)
  * @param data - Data to pass to all templates
  * @param outputDir - Directory to write expanded files (*.md)
  * @throws Error if template directory doesn't exist or isn't a directory
@@ -16,7 +17,7 @@ export async function expandTemplateDir(
   data: Record<string, unknown>,
   outputDir: string
 ): Promise<void> {
-  const extensions = ['j2', 'jinja2'];
+  const extensions = ['md'];
   const resolvedTemplateDir = path.resolve(templateDir);
   const resolvedOutputDir = path.resolve(outputDir);
 
@@ -40,10 +41,12 @@ export async function expandTemplateDir(
 
       extensions.forEach((ext) => {
         eleventyConfig.addExtension(ext, {
-          key: 'njk',
-          outputFileExtension: 'md',
+          compile: (inputContent: string) => {
+            const template = nunjucks.compile(inputContent);
+            return (templateData: Record<string, unknown>) => template.render(templateData);
+          },
           getData: (inputPath: string) => ({
-            permalink: `/${path.basename(inputPath, `.${ext}`)}`,
+            permalink: `/${path.basename(inputPath)}`,
           }),
         });
       });
