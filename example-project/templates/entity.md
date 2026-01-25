@@ -19,4 +19,4 @@ permalink: "entities/{{ entity.id }}.md"
 
 ---
 
-[← エンティティ一覧に戻る](./_index.md)
+[← エンティティ一覧に戻る](../_index.md)
