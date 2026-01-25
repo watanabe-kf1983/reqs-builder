@@ -16,6 +16,7 @@ export async function expandTemplateDir(
   data: Record<string, unknown>,
   outputDir: string
 ): Promise<void> {
+  const extensions = ['j2', 'jinja2'];
   const resolvedTemplateDir = path.resolve(templateDir);
   const resolvedOutputDir = path.resolve(outputDir);
 
@@ -31,35 +32,20 @@ export async function expandTemplateDir(
     quietMode: true,
     configPath: false,
     config: (eleventyConfig) => {
-      // Pass data to templates as global data
-      for (const [key, value] of Object.entries(data)) {
+      Object.entries(data).forEach(([key, value]) => {
         eleventyConfig.addGlobalData(key, value);
-      }
-
-      // Register .j2 and .jinja2 as valid template formats
-      eleventyConfig.addTemplateFormats(['j2', 'jinja2']);
-
-      // Register .j2 and .jinja2 extensions as Nunjucks with .md output
-      // Use getData to set permalink dynamically (strip .md from stem)
-      eleventyConfig.addExtension('j2', {
-        key: 'njk',
-        outputFileExtension: 'md',
-        getData: (inputPath: string) => {
-          // inputPath: /path/to/entity.md.j2
-          // filePathStem would be: /entity.md
-          // We want output: /entity.md (not /entity.md.md)
-          const basename = path.basename(inputPath, '.j2');
-          // basename: entity.md
-          return { permalink: `/${basename}` };
-        },
       });
-      eleventyConfig.addExtension('jinja2', {
-        key: 'njk',
-        outputFileExtension: 'md',
-        getData: (inputPath: string) => {
-          const basename = path.basename(inputPath, '.jinja2');
-          return { permalink: `/${basename}` };
-        },
+
+      eleventyConfig.addTemplateFormats(extensions);
+
+      extensions.forEach((ext) => {
+        eleventyConfig.addExtension(ext, {
+          key: 'njk',
+          outputFileExtension: 'md',
+          getData: (inputPath: string) => ({
+            permalink: `/${path.basename(inputPath, `.${ext}`)}`,
+          }),
+        });
       });
     },
   });
