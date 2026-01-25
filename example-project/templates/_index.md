@@ -1,20 +1,10 @@
----
-title: システム概要
----
-
 # エンティティ一覧
 
 {% for entity in entities -%}
-## {{ entity.name }}
-
-{{ entity.description }}
-
-| フィールド | 型 | 備考 |
-|-----------|-----|------|
-{% for field in entity.fields -%}
-| {{ field.name }} | {{ field.type }} | {{ "PK" if field.pk }}{{ "FK → " + field.fk if field.fk }} |
+- [{{ entity.name }}](./entities/{{ entity.id }}.md) - {{ entity.description }}
 {% endfor %}
-{% endfor %}
+
+# リレーション概要
 
 # リレーション
 

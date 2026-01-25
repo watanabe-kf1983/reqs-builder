@@ -39,11 +39,13 @@ export async function expandTemplateDir(
     ),
   ];
 
-  const eleventyConfig = (config: {
+  type ConfigFn = (config: {
     addGlobalData: (k: string, v: unknown) => void;
     setTemplateFormats: (f: string[]) => void;
     addExtension: (e: string, o: typeof nunjucksExtension) => void;
-  }) => {
+  }) => void;
+
+  const configFn: ConfigFn = (config) => {
     Object.entries(data).forEach(([key, value]) => {
       config.addGlobalData(key, value);
     });
@@ -56,7 +58,7 @@ export async function expandTemplateDir(
   const elev = new Eleventy(resolvedTemplateDir, resolvedOutputDir, {
     quietMode: true,
     configPath: false,
-    config: eleventyConfig,
+    config: configFn as (eleventyConfig: unknown) => void,
   });
 
   await elev.write();
@@ -67,7 +69,14 @@ const nunjucksExtension = {
     const template = nunjucks.compile(inputContent);
     return (templateData: Record<string, unknown>) => template.render(templateData);
   },
-  getData: (inputPath: string) => ({
-    permalink: `/${path.basename(inputPath)}`,
-  }),
+  compileOptions: {
+    permalink: (_contents: string, inputPath: string) => {
+      return (data: Record<string, unknown>) => {
+        if (typeof data.permalink === 'string') {
+          return nunjucks.renderString(data.permalink, data);
+        }
+        return `/${path.basename(inputPath)}`;
+      };
+    },
+  },
 };
