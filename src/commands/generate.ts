@@ -3,7 +3,7 @@ import { Config } from '../config.js';
 import { loadDataDir } from '../core/data-loader.js';
 import { expandTemplateDir } from '../core/template-expander.js';
 
-export function generateCommand(config: Config): void {
+export async function generateCommand(config: Config): Promise<void> {
   const dataDir = resolve(process.cwd(), config.data.dir);
   const templateDir = resolve(process.cwd(), config.templates.dir);
   const outputDir = resolve(process.cwd(), config.output.doc.dir);
@@ -15,7 +15,7 @@ export function generateCommand(config: Config): void {
   console.log('');
 
   const data = loadDataDir(dataDir);
-  expandTemplateDir(templateDir, data, outputDir);
+  await expandTemplateDir(templateDir, data, outputDir);
 
   console.log('Done.');
 }

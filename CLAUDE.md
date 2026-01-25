@@ -68,8 +68,8 @@ reqs-builder/
       hugo.toml           # Hugo 設定
       layouts/            # Hugo レイアウト
     (将来) templates/     # 標準テンプレート
-      er.md.j2            # Mermaid ER図
-      dfd.md.j2           # DFD
+      er.md               # Mermaid ER図
+      dfd.md              # DFD
 ```
 
 ### ユーザプロジェクト構成（例）
@@ -88,7 +88,7 @@ my-project/
     system-overview.yaml
     entities-chapter.yaml
   templates/              # ユーザ定義テンプレート（オーバーライド用）
-    entities-chapter.md.j2
+    entities-chapter.md
   output/                 # 出力先（生成される）
     docs/                 # Generator が生成した Markdown
       system-overview.md

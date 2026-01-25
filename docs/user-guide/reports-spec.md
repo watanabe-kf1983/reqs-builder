@@ -47,7 +47,7 @@ children:
 親テンプレートからの参照：
 
 ```jinja2
-{# templates/entities-chapter.md.j2 #}
+{# templates/entities-chapter.md #}
 # エンティティ一覧
 
 ## ER図
