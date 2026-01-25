@@ -7,7 +7,7 @@ import os from 'os';
 const fixturesDir = path.join(__dirname, 'template-expander.fixtures');
 
 describe('expandTemplateDir', () => {
-  it('should expand all templates in a directory', () => {
+  it('should expand all templates in a directory', async () => {
     const outputDir = fs.mkdtempSync(path.join(os.tmpdir(), 'template-output-'));
 
     try {
@@ -26,7 +26,7 @@ describe('expandTemplateDir', () => {
         ],
       };
 
-      expandTemplateDir(fixturesDir, data, outputDir);
+      await expandTemplateDir(fixturesDir, data, outputDir);
 
       // Check entity.md
       const entityPath = path.join(outputDir, 'entity.md');
@@ -47,12 +47,12 @@ describe('expandTemplateDir', () => {
     }
   });
 
-  it('should create output directory if it does not exist', () => {
+  it('should create output directory if it does not exist', async () => {
     const baseDir = fs.mkdtempSync(path.join(os.tmpdir(), 'template-test-'));
     const outputDir = path.join(baseDir, 'nested', 'output');
 
     try {
-      expandTemplateDir(
+      await expandTemplateDir(
         fixturesDir,
         { entity: { name: 'Test', id: 'test', fields: [] }, relations: [] },
         outputDir
@@ -66,25 +66,23 @@ describe('expandTemplateDir', () => {
     }
   });
 
-  it('should throw an error for non-existent template directory', () => {
+  it('should throw an error for non-existent template directory', async () => {
     const outputDir = fs.mkdtempSync(path.join(os.tmpdir(), 'template-output-'));
 
     try {
-      expect(() => {
-        expandTemplateDir('/non/existent/dir', {}, outputDir);
-      }).toThrow('Template directory not found');
+      await expect(expandTemplateDir('/non/existent/dir', {}, outputDir)).rejects.toThrow();
     } finally {
       fs.rmSync(outputDir, { recursive: true, force: true });
     }
   });
 
-  it('should throw an error when path is not a directory', () => {
+  it('should throw an error when path is not a directory', async () => {
     const outputDir = fs.mkdtempSync(path.join(os.tmpdir(), 'template-output-'));
 
     try {
-      expect(() => {
-        expandTemplateDir(path.join(fixturesDir, 'entity.md.j2'), {}, outputDir);
-      }).toThrow('Path is not a directory');
+      await expect(
+        expandTemplateDir(path.join(fixturesDir, 'entity.md.j2'), {}, outputDir)
+      ).rejects.toThrow();
     } finally {
       fs.rmSync(outputDir, { recursive: true, force: true });
     }

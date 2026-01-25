@@ -14,14 +14,14 @@ export async function devCommand(config: Config): Promise<void> {
   const renderedDir = resolve(process.cwd(), config.output.rendered.dir);
 
   // Initial generate
-  generateCommand(config);
+  await generateCommand(config);
   console.log('');
 
   // Start file watcher
   const watcher = createWatcher({
     paths: [dataDir, templateDir],
     onChange: () => {
-      generateCommand(config);
+      void generateCommand(config);
     },
   });
   watcher.start();
