@@ -61,7 +61,7 @@ reqs-builder/
       hash.ts             # ディレクトリハッシュ計算
       data-loader.ts      # データYAML読み込み・マージ
       schema-validator.ts # 参照整合性チェック
-      report-processor.ts # レポート定義の処理・入れ子展開
+      toc-loader.ts       # toc定義の読み込み・展開
       template-expander.ts # テンプレート展開
   resources/              # 静的リソース（アプリ同梱）
     hugo/                 # Hugo 関連
@@ -84,9 +84,9 @@ my-project/
       user.yaml
       order.yaml
     relations.yaml
-  reports/                # レポート定義
-    system-overview.yaml
-    entities-chapter.yaml
+  toc/                    # 目次定義（ドキュメント単位の導出）
+    erds.yaml.njk
+    entities.yaml.njk
   templates/              # ユーザ定義テンプレート（オーバーライド用）
     entities-chapter.md
   output/                 # 出力先（生成される）
@@ -104,7 +104,7 @@ my-project/
 ### ユーザ向けファイルフォーマット仕様
 
 - スキーマ定義: [docs/user-guide/schema-spec.md](docs/user-guide/schema-spec.md)
-- レポート仕様: [docs/user-guide/reports-spec.md](docs/user-guide/reports-spec.md)
+- ToC 仕様: [docs/user-guide/toc-spec.md](docs/user-guide/toc-spec.md)
 - テンプレート仕様: [docs/user-guide/template-spec.md](docs/user-guide/template-spec.md)
 - API設計（将来）: [docs/user-guide/api-design.md](docs/user-guide/api-design.md)
 
@@ -168,12 +168,10 @@ my-project/
 - [x] 2-2. テンプレートエンジン + データYAML読み込み + generate コマンド
 - [x] 2-3. ファイル監視機能の追加
 - [x] 2-4. pagination（複数ファイル生成）
-- [ ] 2-5. レポート定義の読み込み
-- [ ] 2-6. レポートの入れ子（children）処理
-- [ ] 2-7. foreach による複数出力の連結
-- [ ] 2-8. 標準テンプレート（ER図、DFD、CRUDマトリクス）
-- [ ] 2-9. テンプレートオーバライド
-- [ ] 2-10. JSONPath フィルタ（テンプレート内での複雑なクエリ）
+- [ ] 2-5. toc 定義の読み込み（YAML + Nunjucks テンプレート）
+- [ ] 2-6. relativeFrom フィルタ（ページ間リンク用相対パス計算）
+- [ ] 2-7. 標準テンプレート（ER図、DFD、CRUDマトリクス）
+- [ ] 2-8. テンプレートオーバライド
 
 #### Phase 3: Validator
 
