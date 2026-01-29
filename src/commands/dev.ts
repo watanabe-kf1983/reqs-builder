@@ -9,6 +9,7 @@ export async function devCommand(config: Config): Promise<void> {
   console.log('');
 
   const sourceDir = resolve(process.cwd(), config.source.dir);
+  const tocDir = resolve(process.cwd(), config.toc.dir);
   const templateDir = resolve(process.cwd(), config.templates.dir);
   const outputDir = resolve(process.cwd(), config.output.doc.dir);
   const renderedDir = resolve(process.cwd(), config.output.rendered.dir);
@@ -19,7 +20,7 @@ export async function devCommand(config: Config): Promise<void> {
 
   // Start file watcher
   const watcher = createWatcher({
-    paths: [sourceDir, templateDir],
+    paths: [sourceDir, tocDir, templateDir],
     onChange: () => {
       void generateCommand(config);
     },

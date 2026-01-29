@@ -9,6 +9,14 @@ const configSchema = convict({
       env: 'STDG_SOURCE_DIR',
     },
   },
+  toc: {
+    dir: {
+      doc: 'ToC definitions directory',
+      format: String,
+      default: './toc',
+      env: 'STDG_TOC_DIR',
+    },
+  },
   templates: {
     dir: {
       doc: 'Templates directory',
@@ -26,6 +34,14 @@ const configSchema = convict({
         env: 'STDG_OUTPUT_DOC_DIR',
       },
     },
+    toc: {
+      dir: {
+        doc: 'Rendered ToC output directory (for debugging)',
+        format: String,
+        default: './output/tocs',
+        env: 'STDG_OUTPUT_TOC_DIR',
+      },
+    },
     rendered: {
       dir: {
         doc: 'Rendered output directory',
@@ -39,9 +55,11 @@ const configSchema = convict({
 
 export interface Config {
   source: { dir: string };
+  toc: { dir: string };
   templates: { dir: string };
   output: {
     doc: { dir: string };
+    toc: { dir: string };
     rendered: { dir: string };
   };
 }
