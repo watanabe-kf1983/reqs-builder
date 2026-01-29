@@ -1,6 +1,7 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, afterEach } from 'vitest';
 import { buildToc } from './toc.js';
 import path from 'path';
+import fs from 'fs';
 
 const fixturesDir = path.join(__dirname, 'toc.fixtures');
 
@@ -54,5 +55,33 @@ describe('buildToc', () => {
     expect(keys).toContain('erds');
     expect(keys).toContain('entities');
     expect(keys).toHaveLength(2);
+  });
+
+  describe('outputDir parameter', () => {
+    const testOutputDir = path.join(fixturesDir, 'test-output');
+
+    afterEach(() => {
+      // Clean up test output directory
+      if (fs.existsSync(testOutputDir)) {
+        fs.rmSync(testOutputDir, { recursive: true });
+      }
+    });
+
+    it('should write rendered YAML files to outputDir when specified', () => {
+      buildToc(path.join(fixturesDir, 'valid'), sampleSource, testOutputDir);
+
+      // Verify output directory was created
+      expect(fs.existsSync(testOutputDir)).toBe(true);
+
+      // Verify rendered files were written (without .njk extension)
+      const files = fs.readdirSync(testOutputDir).sort();
+      expect(files).toEqual(['entities.yaml', 'erds.yaml']);
+
+      // Verify content is rendered (not raw template)
+      const erdsContent = fs.readFileSync(path.join(testOutputDir, 'erds.yaml'), 'utf-8');
+      expect(erdsContent).toContain('user-management');
+      expect(erdsContent).toContain('order-management');
+      expect(erdsContent).not.toContain('{{'); // No unrendered template syntax
+    });
   });
 });
