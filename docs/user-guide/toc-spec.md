@@ -57,8 +57,27 @@ erds:
 ```
 
 - `source` オブジェクトにアクセス可能（source/ から読み込まれた全データ）
-- Nunjucks のフィルタが使える（`map`, `unique`, `selectattr` など）
+- Nunjucks のフィルタが使える（下記「利用可能なフィルタ」参照）
 - 出力は YAML としてパースされ、`toc` オブジェクトにマージされる
+
+### 利用可能なフィルタ
+
+toc ファイル（`.yaml.njk`）では以下のフィルタが使用可能：
+
+**reqs-builder が追加するフィルタ:**
+
+| フィルタ | 説明 | 例 |
+|---------|------|-----|
+| `map(attribute="x")` | 配列から属性を抽出 | `entities \| map(attribute="category")` |
+| `unique` | 配列の重複を除去 | `categories \| unique` |
+
+**Nunjucks ビルトインフィルタ:**
+
+`first`, `last`, `length`, `reverse`, `sort`, `join`, `groupby` など。
+詳細は [Nunjucks ドキュメント](https://mozilla.github.io/nunjucks/templating.html#builtin-filters) を参照。
+
+> **Note**: `selectattr(attr, "eq", value)` 形式は Nunjucks では使用不可。
+> 代わりに `{% for item in arr %}{% if item.attr == value %}...{% endif %}{% endfor %}` を使用。
 
 ### エントリの構造
 
