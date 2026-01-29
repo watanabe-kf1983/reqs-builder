@@ -1,13 +1,15 @@
-# エンティティ一覧
+# システム設計ドキュメント
 
-{% for entity in source.entities -%}
-- [{{ entity.name }}](./entities/{{ entity.id }}.md) - {{ entity.description }}
+## ER図（カテゴリ別）
+
+{% for entry in toc.erds -%}
+- [{{ entry.title }}](./{{ entry.permalink }})
 {% endfor %}
 
-# リレーション概要
+## リレーション一覧
 
-# リレーション
-
+| From | To | Cardinality | Description |
+|------|-----|-------------|-------------|
 {% for rel in source.relations -%}
-- **{{ rel.from }}** → **{{ rel.to }}** ({{ rel.cardinality }}): {{ rel.description }}
+| {{ rel.from }} | {{ rel.to }} | {{ rel.cardinality }} | {{ rel.description }} |
 {% endfor %}
