@@ -1,0 +1,6 @@
+erds:
+{% for cat in source.entities | map(attribute="category") | unique %}
+  - id: {{ cat }}
+    title: {{ cat }} ERD
+    permalink: erds/{{ cat }}.md
+{% endfor %}

@@ -69,4 +69,14 @@ describe('buildSource', () => {
     // file2.yaml comes after file1.yaml alphabetically, so its value wins
     expect(config.database.host).toBe('production-server');
   });
+
+  it('should only process .yaml and .yml files', () => {
+    const result = buildSource(path.join(fixturesDir, 'valid'));
+
+    // Should not include keys from non-.yaml/.yml files (readme.txt, ignored.yaml.njk)
+    const keys = Object.keys(result);
+    expect(keys).toContain('entities');
+    expect(keys).toContain('relations');
+    expect(keys).toHaveLength(2);
+  });
 });
