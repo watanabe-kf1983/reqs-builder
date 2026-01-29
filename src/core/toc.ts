@@ -6,6 +6,16 @@ import deepmerge from 'deepmerge';
 
 type DataObject = Record<string, unknown>;
 
+// Configure Nunjucks with custom filters (similar to 11ty built-ins)
+const nunjucksEnv = new nunjucks.Environment();
+
+nunjucksEnv.addFilter('unique', (arr: unknown[]) => [...new Set(arr)]);
+
+// Nunjucks passes keyword args as { attribute: 'value', __keywords: true }
+nunjucksEnv.addFilter('map', (arr: unknown[], kwargs: { attribute: string }) =>
+  arr.map((item) => (item as Record<string, unknown>)[kwargs.attribute])
+);
+
 /**
  * Build ToC (Table of Contents) from .yaml.njk template files.
  * Renders each template with source data, parses as YAML, and merges results.
@@ -50,7 +60,7 @@ const isTocFile = (file: string): boolean => file.endsWith('.yaml.njk');
  */
 function renderTocFile(filePath: string, source: DataObject): DataObject {
   const content = fs.readFileSync(filePath, 'utf-8');
-  const rendered = nunjucks.renderString(content, { source });
+  const rendered = nunjucksEnv.renderString(content, { source });
   const parsed = yaml.load(rendered);
 
   if (typeof parsed !== 'object' || parsed === null) {
