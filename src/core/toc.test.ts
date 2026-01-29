@@ -17,11 +17,11 @@ describe('buildToc', () => {
   it('should render and merge toc files with source data', () => {
     const result = buildToc(path.join(fixturesDir, 'valid'), sampleSource);
 
-    // erds.yaml.njk produces erds array grouped by category
+    // erds.yaml.liquid produces erds array grouped by category
     expect(result).toHaveProperty('erds');
     expect(result.erds).toHaveLength(2); // user-management, order-management
 
-    // entities.yaml.njk produces entities array
+    // entities.yaml.liquid produces entities array
     expect(result).toHaveProperty('entities');
     expect(result.entities).toHaveLength(3);
   });
@@ -43,14 +43,14 @@ describe('buildToc', () => {
   });
 
   it('should throw an error when path is not a directory', () => {
-    const filePath = path.join(fixturesDir, 'valid', 'erds.yaml.njk');
+    const filePath = path.join(fixturesDir, 'valid', 'erds.yaml.liquid');
     expect(() => buildToc(filePath, sampleSource)).toThrow('Path is not a directory');
   });
 
-  it('should only process .yaml.njk files', () => {
+  it('should only process .yaml.liquid files', () => {
     const result = buildToc(path.join(fixturesDir, 'valid'), sampleSource);
 
-    // Should not include any unexpected keys from non-.yaml.njk files
+    // Should not include any unexpected keys from non-.yaml.liquid files
     const keys = Object.keys(result);
     expect(keys).toContain('erds');
     expect(keys).toContain('entities');
