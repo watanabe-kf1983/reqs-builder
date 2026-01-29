@@ -40,7 +40,7 @@ reqs-builder の設定システムの振る舞いを定義する。
 
 | キー | 型 | デフォルト | 環境変数 | 説明 |
 |------|-----|---------|----------|------|
-| `data.dir` | string | `./data` | `STDG_DATA_DIR` | データディレクトリ |
+| `source.dir` | string | `./source` | `STDG_SOURCE_DIR` | ソースディレクトリ |
 | `templates.dir` | string | `./templates` | `STDG_TEMPLATES_DIR` | テンプレートディレクトリ |
 | `output.doc.dir` | string | `./output/docs` | `STDG_OUTPUT_DOC_DIR` | Generator の出力先ディレクトリ |
 | `output.rendered.dir` | string | `./output/rendered` | `STDG_OUTPUT_RENDERED_DIR` | レンダリング結果（HTML）の出力先ディレクトリ |
