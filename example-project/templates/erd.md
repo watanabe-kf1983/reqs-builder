@@ -17,7 +17,7 @@ permalink: "{{ entry.permalink }}"
 | フィールド | 型 | 備考 |
 |-----------|-----|------|
 {% for field in entity.fields -%}
-| {{ field.name }} | {{ field.type }} | {{ "PK" if field.pk }}{{ "FK → " + field.fk if field.fk }} |
+| {{ field.name }} | {{ field.type }} | {% if field.pk %}PK{% endif %}{% if field.fk %}FK → {{ field.fk }}{% endif %} |
 {% endfor %}
 
 {% endif %}{% endfor %}

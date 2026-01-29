@@ -1,6 +1,6 @@
 # ERD documents - one page per category
 erds:
-{% for cat in source.entities | map(attribute="category") | unique %}
+{% for cat in source.entities | map: "category" | uniq %}
   - id: {{ cat }}
     title: {{ cat }} の ER図
     sectionId: {{ cat }}
