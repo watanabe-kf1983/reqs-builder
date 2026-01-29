@@ -3,7 +3,7 @@ import path from 'path';
 import Eleventy from '@11ty/eleventy';
 import { Liquid } from 'liquidjs';
 
-// Create a shared Liquid instance for permalink rendering
+// Create a shared Liquid instance for template and permalink rendering
 const liquid = new Liquid();
 
 /**
@@ -67,6 +67,7 @@ export async function expandTemplateDir(
   await elev.write();
 }
 
+// Custom extension to process files as Liquid templates without markdown conversion
 const liquidExtension = {
   compile: (inputContent: string) => {
     return (templateData: Record<string, unknown>): string => {
