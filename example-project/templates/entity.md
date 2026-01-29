@@ -1,6 +1,6 @@
 ---
 pagination:
-  data: entities
+  data: source.entities
   size: 1
   alias: entity
 permalink: "entities/{{ entity.id }}.md"
