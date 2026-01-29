@@ -1,13 +1,16 @@
 import fs from 'fs';
 import path from 'path';
 import Eleventy from '@11ty/eleventy';
-import nunjucks from 'nunjucks';
+import { Liquid } from 'liquidjs';
+
+// Create a shared Liquid instance for template and permalink rendering
+const liquid = new Liquid();
 
 /**
  * Expand all template files in a directory and write to output directory.
- * Uses 11ty (Eleventy) for template processing with Nunjucks.
+ * Uses 11ty (Eleventy) for template processing with LiquidJS.
  *
- * @param templateDir - Directory containing template files (all files processed as Nunjucks)
+ * @param templateDir - Directory containing template files (all files processed as Liquid)
  * @param data - Data to pass to all templates
  * @param outputDir - Directory to write expanded files (*.md)
  * @throws Error if template directory doesn't exist or isn't a directory
@@ -42,7 +45,7 @@ export async function expandTemplateDir(
   type ConfigFn = (config: {
     addGlobalData: (k: string, v: unknown) => void;
     setTemplateFormats: (f: string[]) => void;
-    addExtension: (e: string, o: typeof nunjucksExtension) => void;
+    addExtension: (e: string, o: typeof liquidExtension) => void;
   }) => void;
 
   const configFn: ConfigFn = (config) => {
@@ -51,7 +54,7 @@ export async function expandTemplateDir(
     });
     config.setTemplateFormats(extensions);
     extensions.forEach((ext) => {
-      config.addExtension(ext, nunjucksExtension);
+      config.addExtension(ext, liquidExtension);
     });
   };
 
@@ -64,16 +67,18 @@ export async function expandTemplateDir(
   await elev.write();
 }
 
-const nunjucksExtension = {
+// Custom extension to process files as Liquid templates without markdown conversion
+const liquidExtension = {
   compile: (inputContent: string) => {
-    const template = nunjucks.compile(inputContent);
-    return (templateData: Record<string, unknown>) => template.render(templateData);
+    return (templateData: Record<string, unknown>): string => {
+      return liquid.parseAndRenderSync(inputContent, templateData) as string;
+    };
   },
   compileOptions: {
     permalink: (_contents: string, inputPath: string) => {
-      return (data: Record<string, unknown>) => {
+      return (data: Record<string, unknown>): string => {
         if (typeof data.permalink === 'string') {
-          return nunjucks.renderString(data.permalink, data);
+          return liquid.parseAndRenderSync(data.permalink, data) as string;
         }
         return `/${path.basename(inputPath)}`;
       };

@@ -167,7 +167,7 @@ entities:
 
 ### テンプレートでの使用
 
-```nunjucks
+```liquid
 {% for entity in entities %}
 {% set desc = markdownDescriptions | selectById(entity.id) %}
 ## {{ entity.name }}

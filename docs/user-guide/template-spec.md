@@ -7,7 +7,7 @@
 コレクションの各要素から個別のファイルを生成する機能。
 11ty-like なフロントマターで定義する。
 
-```jinja2
+```liquid
 ---
 foreach: entities
 path: "docs/entities/{{ id }}.md"
@@ -25,7 +25,7 @@ path: "docs/entities/{{ id }}.md"
 - テンプレート内: `{{ source | jsonpath("$.relations[?@.from==entity.id]") }}`
 - MCP API: 同じ JSONPath 構文
 
-Nunjucks のネイティブ構文（`entity.name` 等）も使用可能だが、
+LiquidJS のネイティブ構文（`entity.name` 等）も使用可能だが、
 複雑なフィルタリングには JSONPath を推奨。
 
 ## テンプレートのオーバライド
@@ -116,7 +116,7 @@ relations:
 
 ### テンプレート（templates/er.md）
 
-```jinja2
+```liquid
 ```mermaid
 erDiagram
 {% for entity in nodes %}

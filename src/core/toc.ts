@@ -1,27 +1,21 @@
 import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
-import nunjucks from 'nunjucks';
+import { Liquid } from 'liquidjs';
 import deepmerge from 'deepmerge';
 
 type DataObject = Record<string, unknown>;
 
-// Configure Nunjucks with custom filters (similar to 11ty built-ins)
-const nunjucksEnv = new nunjucks.Environment();
-
-nunjucksEnv.addFilter('unique', (arr: unknown[]) => [...new Set(arr)]);
-
-// Nunjucks passes keyword args as { attribute: 'value', __keywords: true }
-nunjucksEnv.addFilter('map', (arr: unknown[], kwargs: { attribute: string }) =>
-  arr.map((item) => (item as Record<string, unknown>)[kwargs.attribute])
-);
+// Configure LiquidJS engine
+// LiquidJS has built-in filters: map, uniq, where, first, last, sort, etc.
+const liquid = new Liquid();
 
 /**
- * Build ToC (Table of Contents) from .yaml.njk template files.
+ * Build ToC (Table of Contents) from .yaml.liquid template files.
  * Renders each template with source data, parses as YAML, and merges results.
  *
  * @param dirPath - Path to the toc directory
- * @param source - Source data to pass to Nunjucks templates
+ * @param source - Source data to pass to Liquid templates
  * @param outputDir - Optional directory to write rendered YAML files (for debugging)
  * @returns Merged toc object, or empty object if directory doesn't exist
  */
@@ -43,8 +37,8 @@ export function buildToc(dirPath: string, source: DataObject, outputDir?: string
   // Phase 1: Render all files and optionally save to outputDir
   const renderedFiles = tocFiles.map((file) => {
     const content = fs.readFileSync(file, 'utf-8');
-    const rendered = nunjucksEnv.renderString(content, { source });
-    const baseName = path.basename(file, '.njk'); // e.g., "entities.yaml"
+    const rendered = liquid.parseAndRenderSync(content, { source }) as string;
+    const baseName = path.basename(file, '.liquid'); // e.g., "entities.yaml"
     return { file, baseName, rendered };
   });
 
@@ -77,7 +71,7 @@ function getFiles(dirPath: string): string[] {
     .map((file) => path.join(dirPath, file));
 }
 
-const isTocFile = (file: string): boolean => file.endsWith('.yaml.njk');
+const isTocFile = (file: string): boolean => file.endsWith('.yaml.liquid');
 
 /**
  * Parse rendered YAML content into an object.

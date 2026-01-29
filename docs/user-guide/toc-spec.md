@@ -4,7 +4,7 @@
 
 ## 概要
 
-`toc/` ディレクトリに Nunjucks テンプレート（`.yaml.njk`）を配置し、生データからドキュメント単位を導出する。
+`toc/` ディレクトリに LiquidJS テンプレート（`.yaml.liquid`）を配置し、生データからドキュメント単位を導出する。
 
 ## 役割分担
 
@@ -30,25 +30,26 @@ Template（表示）
 
 ## ファイル形式
 
-YAML の Nunjucks テンプレート（`.yaml.njk`）。
+YAML の LiquidJS テンプレート（`.yaml.liquid`）。
 
 ```
 toc/
-  erds.yaml.njk
-  crud-matrices.yaml.njk
+  erds.yaml.liquid
+  crud-matrices.yaml.liquid
   ...
 ```
 
-拡張子を `.yaml.njk` にする理由：
-- `.yaml` だとエディタが YAML としてパースし、Nunjucks 構文にエラーを出す
-- `.yaml.njk` なら Nunjucks テンプレートとして認識される
+拡張子を `.yaml.liquid` にする理由：
+- `.yaml` だとエディタが YAML としてパースし、Liquid 構文にエラーを出す
+- `.yaml.liquid` なら Liquid テンプレートとして認識される
 
 ## 基本構造
 
 ```yaml
-# toc/erds.yaml.njk
+# toc/erds.yaml.liquid
 erds:
-  {% for cat in source.entities | map(attribute="category") | unique %}
+  {% assign categories = source.entities | map: "category" | uniq %}
+  {% for cat in categories %}
   - id: {{ cat }}
     title: {{ cat }} の ER図
     sectionId: {{ cat }}
@@ -57,27 +58,45 @@ erds:
 ```
 
 - `source` オブジェクトにアクセス可能（source/ から読み込まれた全データ）
-- Nunjucks のフィルタが使える（下記「利用可能なフィルタ」参照）
+- LiquidJS のフィルタが使える（下記「利用可能なフィルタ」参照）
 - 出力は YAML としてパースされ、`toc` オブジェクトにマージされる
 
 ### 利用可能なフィルタ
 
-toc ファイル（`.yaml.njk`）では以下のフィルタが使用可能：
+toc ファイル（`.yaml.liquid`）では以下のフィルタが使用可能：
 
-**reqs-builder が追加するフィルタ:**
+**よく使う LiquidJS ビルトインフィルタ:**
 
 | フィルタ | 説明 | 例 |
 |---------|------|-----|
-| `map(attribute="x")` | 配列から属性を抽出 | `entities \| map(attribute="category")` |
-| `unique` | 配列の重複を除去 | `categories \| unique` |
+| `map: "x"` | 配列から属性を抽出 | `entities \| map: "category"` |
+| `uniq` | 配列の重複を除去 | `categories \| uniq` |
+| `where: "attr", "value"` | 条件でフィルタリング | `entities \| where: "type", "master"` |
+| `first` | 配列の最初の要素 | `entities \| first` |
+| `last` | 配列の最後の要素 | `entities \| last` |
+| `size` | 配列の要素数 | `entities \| size` |
+| `sort: "attr"` | 属性でソート | `entities \| sort: "name"` |
+| `reverse` | 配列を逆順に | `entities \| reverse` |
+| `join: ", "` | 配列を文字列に結合 | `names \| join: ", "` |
 
-**Nunjucks ビルトインフィルタ:**
+詳細は [LiquidJS ドキュメント](https://liquidjs.com/filters/overview.html) を参照。
 
-`first`, `last`, `length`, `reverse`, `sort`, `join`, `groupby` など。
-詳細は [Nunjucks ドキュメント](https://mozilla.github.io/nunjucks/templating.html#builtin-filters) を参照。
+**注意: フィルタチェーンと `{% for %}` ループ**
 
-> **Note**: `selectattr(attr, "eq", value)` 形式は Nunjucks では使用不可。
-> 代わりに `{% for item in arr %}{% if item.attr == value %}...{% endif %}{% endfor %}` を使用。
+LiquidJS では、`{% for %}` ループ内で直接フィルタチェーンを使用すると正しく動作しない場合がある。フィルタチェーンを使う場合は、先に `{% assign %}` で変数に代入する：
+
+```liquid
+# 正しい書き方
+{% assign categories = source.entities | map: "category" | uniq %}
+{% for cat in categories %}
+  ...
+{% endfor %}
+
+# 動作しない書き方（[object Object] が出力される）
+{% for cat in source.entities | map: "category" | uniq %}
+  ...
+{% endfor %}
+```
 
 ### エントリの構造
 
@@ -99,9 +118,10 @@ toc ファイル（`.yaml.njk`）では以下のフィルタが使用可能：
 各エントリを別ページとして出力する場合：
 
 ```yaml
-# toc/erds.yaml.njk
+# toc/erds.yaml.liquid
 erds:
-  {% for cat in source.entities | map(attribute="category") | unique %}
+  {% assign categories = source.entities | map: "category" | uniq %}
+  {% for cat in categories %}
   - id: {{ cat }}
     title: {{ cat }} の ER図
     sectionId: {{ cat }}
@@ -121,7 +141,7 @@ permalink: "{{ entry.permalink }}"
 
 # {{ entry.title }} {#{{ entry.sectionId }}}
 
-{% set entities = source.entities | selectattr("category", "eq", entry.id) %}
+{% assign entities = source.entities | where: "category", entry.id %}
 {% for e in entities %}
 - {{ e.name }}
 {% endfor %}
@@ -132,9 +152,10 @@ permalink: "{{ entry.permalink }}"
 全エントリを一つのページ内にセクションとして展開する場合：
 
 ```yaml
-# toc/erds.yaml.njk
+# toc/erds.yaml.liquid
 erds:
-  {% for cat in source.entities | map(attribute="category") | unique %}
+  {% assign categories = source.entities | map: "category" | uniq %}
+  {% for cat in categories %}
   - id: {{ cat }}
     title: {{ cat }} の ER図
     sectionId: {{ cat }}
@@ -153,7 +174,7 @@ permalink: "erds.md"
 {% for entry in toc.erds %}
 ## {{ entry.title }} {#{{ entry.sectionId }}}
 
-{% set entities = source.entities | selectattr("category", "eq", entry.id) %}
+{% assign entities = source.entities | where: "category", entry.id %}
 {% for e in entities %}
 - {{ e.name }}
 {% endfor %}
@@ -173,7 +194,7 @@ permalink: "erds.md"
 ## 処理フロー
 
 1. `source/` から YAML を読み込み、`source` オブジェクトを構築
-2. `toc/*.yaml.njk` を `source` を渡してレンダリング
+2. `toc/*.yaml.liquid` を `source` を渡してレンダリング
 3. レンダリング結果を YAML としてパース
 4. 全ファイルの結果をマージして `toc` オブジェクトを構築
 5. テンプレートに `{ source, toc }` を渡す
@@ -186,10 +207,11 @@ permalink: "erds.md"
 - toc は「何がドキュメントになるか」だけを定義
 - 責務を絞ることで、toc 定義がシンプルになる
 
-### Nunjucks テンプレートを採用した理由
+### LiquidJS テンプレートを採用した理由
 
 - 独自 DSL を発明しなくて済む
-- `unique`, `map`, `selectattr` など既存のフィルタが使える
+- `uniq`, `map`, `where` など標準フィルタが充実
+- Shopify Liquid 互換でドキュメントやサンプルが豊富
 - 必要なら入れ子構造も表現できる柔軟性がある
 
 ### pagination との関係
@@ -213,9 +235,10 @@ pagination:
 各 toc エントリには `permalink` を定義できる：
 
 ```yaml
-# toc/erds.yaml.njk
+# toc/erds.yaml.liquid
 erds:
-  {% for cat in source.entities | map(attribute="category") | unique %}
+  {% assign categories = source.entities | map: "category" | uniq %}
+  {% for cat in categories %}
   - id: {{ cat }}
     title: {{ cat }} の ER図
     permalink: erds/{{ cat }}.md
@@ -228,9 +251,9 @@ permalink はルートからの相対パスで指定する。
 
 ページ間リンクを張るとき、相対パスの計算が必要になる。`relativeFrom` カスタムフィルタを使用する：
 
-```jinja2
-{% set target = toc.entities | selectattr("id", "eq", "User") | first %}
-<a href="{{ target.permalink | relativeFrom(entry.permalink) }}#{{ target.sectionId }}">
+```liquid
+{% assign target = toc.entities | where: "id", "User" | first %}
+<a href="{{ target.permalink | relativeFrom: entry.permalink }}#{{ target.sectionId }}">
   {{ target.title }}
 </a>
 ```
@@ -282,9 +305,10 @@ config.addFilter('relativeFrom', (to: string, from: string) => {
 ```
 
 ```yaml
-# toc/erds.yaml.njk
+# toc/erds.yaml.liquid
 erds:
-  {% for cat in source.entities | map(attribute="category") | unique %}
+  {% assign categories = source.entities | map: "category" | uniq %}
+  {% for cat in categories %}
   - id: {{ cat }}
     title: {{ cat }} の ER図
     sectionId: {{ cat }}
@@ -304,7 +328,7 @@ permalink: "{{ entry.permalink }}"
 
 # {{ entry.title }} {#{{ entry.sectionId }}}
 
-{% set entities = source.entities | selectattr("category", "eq", entry.id) %}
+{% assign entities = source.entities | where: "category", entry.id %}
 ...
 ```
 
@@ -323,7 +347,7 @@ permalink: "{{ entry.permalink }}"
 ```
 
 ```yaml
-# toc/dfds.yaml.njk
+# toc/dfds.yaml.liquid
 dfds:
   {% for dfd in source.dfds %}
   - id: {{ dfd.id }}
@@ -345,15 +369,14 @@ permalink: "{{ entry.permalink }}"
 
 # {{ entry.title }} {#{{ entry.sectionId }}}
 
-{% set dfd = source.dfds | selectattr("id", "eq", entry.id) | first %}
-{% set entities = source.entities | selectattr("id", "in", dfd.scope.entities) %}
+{% assign dfd = source.dfds | where: "id", entry.id | first %}
 ...
 ```
 
 ### 例3: セクション展開（全 DFD を一ページに）
 
 ```yaml
-# toc/dfds.yaml.njk（例2と同じだが permalink が異なる）
+# toc/dfds.yaml.liquid（例2と同じだが permalink が異なる）
 dfds:
   {% for dfd in source.dfds %}
   - id: {{ dfd.id }}
@@ -374,8 +397,7 @@ permalink: "dfds.md"
 {% for entry in toc.dfds %}
 ## {{ entry.title }} {#{{ entry.sectionId }}}
 
-{% set dfd = source.dfds | selectattr("id", "eq", entry.id) | first %}
-{% set entities = source.entities | selectattr("id", "in", dfd.scope.entities) %}
+{% assign dfd = source.dfds | where: "id", entry.id | first %}
 ...
 
 {% endfor %}

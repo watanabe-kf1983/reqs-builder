@@ -26,7 +26,7 @@ ERD、DFD、CRUDマトリクス等の要件定義成果物を生成しようと�
 - **Schema**: データ構造と参照制約を定義（OpenAPI/JSON Schema + x-ref 拡張）
 - **Data**: 実際の値（YAML ファイル群、Git管理）
 - **Reports**: 何を、どこに、どういう構造で出力するか
-- **Templates**: 見た目の定義（Nunjucks + JSONPath）
+- **Templates**: 見た目の定義（LiquidJS + JSONPath）
 - **Validation**: 参照整合性チェック（FK制約相当）
 
 ## Core Design Decision
