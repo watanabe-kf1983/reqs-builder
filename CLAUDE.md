@@ -100,6 +100,7 @@ my-project/
 ### アプリケーション仕様（テストの入力）
 
 - 設定システム: [docs/specs/config.spec.md](docs/specs/config.spec.md)
+- Markdownパーサー: [docs/specs/markdown-parser.spec.md](docs/specs/markdown-parser.spec.md)
 
 ### ユーザ向けファイルフォーマット仕様
 
@@ -171,7 +172,8 @@ my-project/
 - [ ] 2-5. toc 定義の読み込み（YAML + Nunjucks テンプレート）
 - [ ] 2-6. relativeFrom フィルタ（ページ間リンク用相対パス計算）
 - [ ] 2-7. 標準テンプレート（ER図、DFD、CRUDマトリクス）
-- [ ] 2-8. テンプレートオーバライド
+- [ ] 2-8. Markdownパーサー（データソースとしてのMarkdown読み込み）
+- [ ] 2-9. テンプレートオーバライド
 
 #### Phase 3: Validator
 
