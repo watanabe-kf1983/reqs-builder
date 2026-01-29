@@ -48,7 +48,8 @@ toc/
 ```yaml
 # toc/erds.yaml.liquid
 erds:
-  {% for cat in source.entities | map: "category" | uniq %}
+  {% assign categories = source.entities | map: "category" | uniq %}
+  {% for cat in categories %}
   - id: {{ cat }}
     title: {{ cat }} の ER図
     sectionId: {{ cat }}
@@ -80,6 +81,23 @@ toc ファイル（`.yaml.liquid`）では以下のフィルタが使用可能�
 
 詳細は [LiquidJS ドキュメント](https://liquidjs.com/filters/overview.html) を参照。
 
+**注意: フィルタチェーンと `{% for %}` ループ**
+
+LiquidJS では、`{% for %}` ループ内で直接フィルタチェーンを使用すると正しく動作しない場合がある。フィルタチェーンを使う場合は、先に `{% assign %}` で変数に代入する：
+
+```liquid
+# 正しい書き方
+{% assign categories = source.entities | map: "category" | uniq %}
+{% for cat in categories %}
+  ...
+{% endfor %}
+
+# 動作しない書き方（[object Object] が出力される）
+{% for cat in source.entities | map: "category" | uniq %}
+  ...
+{% endfor %}
+```
+
 ### エントリの構造
 
 各 toc エントリは以下のプロパティを持つ：
@@ -102,7 +120,8 @@ toc ファイル（`.yaml.liquid`）では以下のフィルタが使用可能�
 ```yaml
 # toc/erds.yaml.liquid
 erds:
-  {% for cat in source.entities | map: "category" | uniq %}
+  {% assign categories = source.entities | map: "category" | uniq %}
+  {% for cat in categories %}
   - id: {{ cat }}
     title: {{ cat }} の ER図
     sectionId: {{ cat }}
@@ -135,7 +154,8 @@ permalink: "{{ entry.permalink }}"
 ```yaml
 # toc/erds.yaml.liquid
 erds:
-  {% for cat in source.entities | map: "category" | uniq %}
+  {% assign categories = source.entities | map: "category" | uniq %}
+  {% for cat in categories %}
   - id: {{ cat }}
     title: {{ cat }} の ER図
     sectionId: {{ cat }}
@@ -217,7 +237,8 @@ pagination:
 ```yaml
 # toc/erds.yaml.liquid
 erds:
-  {% for cat in source.entities | map: "category" | uniq %}
+  {% assign categories = source.entities | map: "category" | uniq %}
+  {% for cat in categories %}
   - id: {{ cat }}
     title: {{ cat }} の ER図
     permalink: erds/{{ cat }}.md
@@ -286,7 +307,8 @@ config.addFilter('relativeFrom', (to: string, from: string) => {
 ```yaml
 # toc/erds.yaml.liquid
 erds:
-  {% for cat in source.entities | map: "category" | uniq %}
+  {% assign categories = source.entities | map: "category" | uniq %}
+  {% for cat in categories %}
   - id: {{ cat }}
     title: {{ cat }} の ER図
     sectionId: {{ cat }}
