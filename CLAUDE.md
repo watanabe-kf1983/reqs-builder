@@ -13,7 +13,7 @@
 - ランタイム: Node.js
 - スキーマ検証: Zod
 - YAML 処理: js-yaml
-- テンプレート: Nunjucks（LiquidJS への移行予定）
+- テンプレート: LiquidJS
 - クエリ: jsonpath-plus
 - ディレクトリハッシュ: folder-hash
 - ファイル監視: chokidar
@@ -25,18 +25,12 @@
 - **エコシステム**: chokidar, folder-hash 等の監視・ハッシュ系ライブラリが成熟
 - **単一パッケージで CLI + MCP**: Node の `bin` フィールドで CLI、MCP SDK も npm で導入可能
 - **AI との協調**: 型定義が「仕様書」として機能し、Claude Code がコードの意図を理解しやすい
-- **Nunjucks**: 11ty でも使われている実績、Jinja2 互換で知識流用可能
 
-### LiquidJS への移行予定
+### LiquidJS を選択した理由
 
-現在 Nunjucks を使用しているが、LiquidJS への移行を予定している。
-
-**移行理由:**
-
-- **フィルタの充実**: LiquidJS は `map`, `uniq`, `where` 等のフィルタが標準で利用可能。Nunjucks では `map(attribute='xxx')` 構文が動作せず、カスタムフィルタの実装が必要だった
+- **フィルタの充実**: `map`, `uniq`, `where` 等のフィルタが標準で利用可能
 - **Shopify Liquid 互換**: 広く使われている Shopify テーマの記法と互換性があり、ドキュメントやサンプルが豊富
-- **テンプレート構文の互換性**: `{% for %}`, `{% if %}`, `{{ variable }}` 等の基本構文は Nunjucks とほぼ同一で、移行コストが低い
-- **11ty との親和性**: 11ty は Nunjucks と LiquidJS の両方をサポートしており、template-expander.ts での切り替えが容易
+- **11ty との親和性**: 11ty は LiquidJS をネイティブサポートしており、統合が容易
 
 ### Hugo を選択した理由
 
@@ -96,8 +90,8 @@ my-project/
       order.yaml
     relations.yaml
   toc/                    # 目次定義（ドキュメント単位の導出）
-    erds.yaml.njk
-    entities.yaml.njk
+    erds.yaml.liquid
+    entities.yaml.liquid
   templates/              # ユーザ定義テンプレート（オーバーライド用）
     entities-chapter.md
   output/                 # 出力先（生成される）
@@ -180,7 +174,7 @@ my-project/
 - [x] 2-2. テンプレートエンジン + データYAML読み込み + generate コマンド
 - [x] 2-3. ファイル監視機能の追加
 - [x] 2-4. pagination（複数ファイル生成）
-- [x] 2-5. toc 定義の読み込み（YAML + Nunjucks テンプレート）
+- [x] 2-5. toc 定義の読み込み（ToC テンプレート）
 - [ ] 2-6. テンプレートエンジンを LiquidJS へ移行
 - [ ] 2-7. relativeFrom フィルタ（ページ間リンク用相対パス計算）
 - [ ] 2-8. 標準テンプレート（ER図、DFD、CRUDマトリクス）
