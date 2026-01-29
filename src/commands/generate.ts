@@ -9,7 +9,7 @@ export async function generateCommand(config: Config): Promise<void> {
   const tocDir = resolve(process.cwd(), config.toc.dir);
   const templateDir = resolve(process.cwd(), config.templates.dir);
   const outputDir = resolve(process.cwd(), config.output.doc.dir);
-  const tocOutputDir = resolve(process.cwd(), 'output/tocs');
+  const tocOutputDir = resolve(process.cwd(), config.output.toc.dir);
 
   console.log('Generating documents...');
   console.log(`  Source directory: ${sourceDir}`);

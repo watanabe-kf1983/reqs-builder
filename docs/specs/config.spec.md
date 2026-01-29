@@ -44,6 +44,7 @@ reqs-builder の設定システムの振る舞いを定義する。
 | `toc.dir` | string | `./toc` | `STDG_TOC_DIR` | ToC定義ディレクトリ |
 | `templates.dir` | string | `./templates` | `STDG_TEMPLATES_DIR` | テンプレートディレクトリ |
 | `output.doc.dir` | string | `./output/docs` | `STDG_OUTPUT_DOC_DIR` | Generator の出力先ディレクトリ |
+| `output.toc.dir` | string | `./output/tocs` | `STDG_OUTPUT_TOC_DIR` | レンダリング済みToC出力ディレクトリ（デバッグ用） |
 | `output.rendered.dir` | string | `./output/rendered` | `STDG_OUTPUT_RENDERED_DIR` | レンダリング結果（HTML）の出力先ディレクトリ |
 | `render.hugo.*` | object | `{}` | (なし) | hugo-bin に渡すオプション（設定ファイルのみ）（未実装） |
 | `render.customServer.command` | string | (なし) | `STDG_RENDER_CUSTOM_SERVER_COMMAND` | カスタムレンダリングサーバのコマンド。設定時は hugo-bin の代わりに使用（未実装：AsciiDoc対応時に実装予定） |

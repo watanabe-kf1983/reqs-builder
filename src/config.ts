@@ -34,6 +34,14 @@ const configSchema = convict({
         env: 'STDG_OUTPUT_DOC_DIR',
       },
     },
+    toc: {
+      dir: {
+        doc: 'Rendered ToC output directory (for debugging)',
+        format: String,
+        default: './output/tocs',
+        env: 'STDG_OUTPUT_TOC_DIR',
+      },
+    },
     rendered: {
       dir: {
         doc: 'Rendered output directory',
@@ -51,6 +59,7 @@ export interface Config {
   templates: { dir: string };
   output: {
     doc: { dir: string };
+    toc: { dir: string };
     rendered: { dir: string };
   };
 }
