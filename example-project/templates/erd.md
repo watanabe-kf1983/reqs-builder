@@ -7,11 +7,9 @@ permalink: "{{ entry.permalink }}"
 ---
 # {{ entry.title }}
 
-{% set entities = source.entities | selectattr("category", "eq", entry.id) %}
-
 ## エンティティ一覧
 
-{% for entity in entities %}
+{% for entity in source.entities %}{% if entity.category == entry.id %}
 ### {{ entity.name }}
 
 {{ entity.description }}
@@ -22,7 +20,7 @@ permalink: "{{ entry.permalink }}"
 | {{ field.name }} | {{ field.type }} | {{ "PK" if field.pk }}{{ "FK → " + field.fk if field.fk }} |
 {% endfor %}
 
-{% endfor %}
+{% endif %}{% endfor %}
 
 ---
 
