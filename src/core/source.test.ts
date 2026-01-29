@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { buildSource } from './data-loader.js';
+import { buildSource } from './source.js';
 import path from 'path';
 
-const fixturesDir = path.join(__dirname, 'data-loader.fixtures');
+const fixturesDir = path.join(__dirname, 'source.fixtures');
 
 describe('buildSource', () => {
   it('should load and merge YAML files from a directory', () => {

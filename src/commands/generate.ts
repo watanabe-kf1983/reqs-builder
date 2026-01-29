@@ -1,6 +1,6 @@
 import { resolve } from 'path';
 import { Config } from '../config.js';
-import { buildSource } from '../core/data-loader.js';
+import { buildSource } from '../core/source.js';
 import { expandTemplateDir } from '../core/template-expander.js';
 
 export async function generateCommand(config: Config): Promise<void> {
