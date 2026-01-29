@@ -41,6 +41,7 @@ reqs-builder の設定システムの振る舞いを定義する。
 | キー | 型 | デフォルト | 環境変数 | 説明 |
 |------|-----|---------|----------|------|
 | `source.dir` | string | `./source` | `STDG_SOURCE_DIR` | ソースディレクトリ |
+| `toc.dir` | string | `./toc` | `STDG_TOC_DIR` | ToC定義ディレクトリ |
 | `templates.dir` | string | `./templates` | `STDG_TEMPLATES_DIR` | テンプレートディレクトリ |
 | `output.doc.dir` | string | `./output/docs` | `STDG_OUTPUT_DOC_DIR` | Generator の出力先ディレクトリ |
 | `output.rendered.dir` | string | `./output/rendered` | `STDG_OUTPUT_RENDERED_DIR` | レンダリング結果（HTML）の出力先ディレクトリ |
