@@ -51,9 +51,11 @@ export function buildToc(dirPath: string, source: DataObject, outputDir?: string
   // Write rendered files to outputDir if specified
   if (outputDir) {
     const resolvedOutputDir = path.resolve(outputDir);
-    if (!fs.existsSync(resolvedOutputDir)) {
-      fs.mkdirSync(resolvedOutputDir, { recursive: true });
+    // Clean up existing directory to remove stale files
+    if (fs.existsSync(resolvedOutputDir)) {
+      fs.rmSync(resolvedOutputDir, { recursive: true });
     }
+    fs.mkdirSync(resolvedOutputDir, { recursive: true });
     for (const { baseName, rendered } of renderedFiles) {
       fs.writeFileSync(path.join(resolvedOutputDir, baseName), rendered);
     }
