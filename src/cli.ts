@@ -16,7 +16,7 @@ program.command('dev').description('Start development server').action(withConfig
 
 program
   .command('generate')
-  .description('Generate documents from data and templates')
+  .description('Generate documents from source and templates')
   .action(withConfig(generateCommand));
 
 program.parse();
