@@ -1,12 +1,12 @@
 import convict from 'convict';
 
 const configSchema = convict({
-  data: {
+  source: {
     dir: {
-      doc: 'Data directory',
+      doc: 'Source directory',
       format: String,
-      default: './data',
-      env: 'STDG_DATA_DIR',
+      default: './source',
+      env: 'STDG_SOURCE_DIR',
     },
   },
   templates: {
@@ -38,7 +38,7 @@ const configSchema = convict({
 });
 
 export interface Config {
-  data: { dir: string };
+  source: { dir: string };
   templates: { dir: string };
   output: {
     doc: { dir: string };

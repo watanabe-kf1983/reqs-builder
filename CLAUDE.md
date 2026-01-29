@@ -59,9 +59,9 @@ reqs-builder/
       mcp-server.ts       # reqs-builder mcp-server（将来）
     core/
       hash.ts             # ディレクトリハッシュ計算
-      data-loader.ts      # データYAML読み込み・マージ
+      source.ts           # ソースYAML読み込み・マージ
       schema-validator.ts # 参照整合性チェック
-      toc-loader.ts       # toc定義の読み込み・展開
+      toc.ts              # toc定義の読み込み・展開
       template-expander.ts # テンプレート展開
   resources/              # 静的リソース（アプリ同梱）
     hugo/                 # Hugo 関連
@@ -79,7 +79,7 @@ my-project/
   schema/                 # スキーマ定義
     entities.yaml
     relations.yaml
-  data/                   # データ
+  source/                 # ソースデータ
     entities/
       user.yaml
       order.yaml
@@ -129,7 +129,7 @@ my-project/
 
 #### テストフィクスチャ
 
-- **ファイルベース、モジュール隣接型**: `data-loader.fixtures/` のようにテスト対象モジュールの隣に配置
+- **ファイルベース、モジュール隣接型**: `source.fixtures/` のようにテスト対象モジュールの隣に配置
 - 期待値はテストコード内に記述（振る舞いテストの意図を明確にするため）
 
 #### 関数の並び順（Newspaper style）
@@ -141,7 +141,7 @@ my-project/
 #### コードスタイル
 
 - **関数型スタイルを優先**: `let` + `for` ループより `map/filter/reduce` を使う
-- **命名はモジュール名に合わせる**: `data-loader` モジュールなら `isDataFile`, `loadDataFile`
+- **命名はモジュール名に合わせる**: `source` モジュールなら `isSourceFile`, `buildSource`
 
 #### 言語
 
@@ -179,7 +179,7 @@ my-project/
 
 - [ ] 3-1. スキーマ定義（YAML）のパースと参照整合性チェック
 - [ ] 3-2. 検証結果ファイル（.validation-result.yaml）の生成
-- [ ] 3-3. ファイル監視（schema/data → Validator、validation-result → Generator）
+- [ ] 3-3. ファイル監視（schema/source → Validator、validation-result → Generator）
 
 #### 将来
 

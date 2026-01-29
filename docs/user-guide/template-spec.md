@@ -22,7 +22,7 @@ path: "docs/entities/{{ id }}.md"
 **JSONPath を統一的なクエリ構文として採用：**
 
 - CLI からのクエリ: `reqs-builder query "$.entities[?@.type=='master']"`
-- テンプレート内: `{{ data | jsonpath("$.relations[?@.from==entity.id]") }}`
+- テンプレート内: `{{ source | jsonpath("$.relations[?@.from==entity.id]") }}`
 - MCP API: 同じ JSONPath 構文
 
 Nunjucks のネイティブ構文（`entity.name` 等）も使用可能だが、
@@ -74,7 +74,7 @@ entities:
 ### 前提となるデータ構造
 
 ```yaml
-# data/entities.yaml
+# source/entities.yaml
 entities:
   - id: user
     name: ユーザー
@@ -101,7 +101,7 @@ entities:
 ```
 
 ```yaml
-# data/relations.yaml
+# source/relations.yaml
 relations:
   - from: user
     to: order

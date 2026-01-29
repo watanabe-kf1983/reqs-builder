@@ -12,18 +12,20 @@ describe('expandTemplateDir', () => {
 
     try {
       const data = {
-        entity: {
-          id: 'user',
-          name: 'ユーザー',
-          fields: [
-            { name: 'id', type: 'string', pk: true },
-            { name: 'email', type: 'string' },
+        source: {
+          entity: {
+            id: 'user',
+            name: 'ユーザー',
+            fields: [
+              { name: 'id', type: 'string', pk: true },
+              { name: 'email', type: 'string' },
+            ],
+          },
+          relations: [
+            { from: 'user', to: 'order', cardinality: '1:N' },
+            { from: 'order', to: 'product', cardinality: 'N:M' },
           ],
         },
-        relations: [
-          { from: 'user', to: 'order', cardinality: '1:N' },
-          { from: 'order', to: 'product', cardinality: 'N:M' },
-        ],
       };
 
       await expandTemplateDir(fixturesDir, data, outputDir);
@@ -54,7 +56,7 @@ describe('expandTemplateDir', () => {
     try {
       await expandTemplateDir(
         fixturesDir,
-        { entity: { name: 'Test', id: 'test', fields: [] }, relations: [] },
+        { source: { entity: { name: 'Test', id: 'test', fields: [] }, relations: [] } },
         outputDir
       );
 

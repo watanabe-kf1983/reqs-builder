@@ -1,5 +1,5 @@
 # リレーション一覧
 
-{% for rel in relations -%}
+{% for rel in source.relations -%}
 - {{ rel.from }} → {{ rel.to }} ({{ rel.cardinality }})
 {% endfor %}

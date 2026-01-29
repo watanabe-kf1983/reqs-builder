@@ -10,7 +10,7 @@
 
 | 層 | 責務 |
 |---|---|
-| **data/** | ドメインの真実（正規化されたデータ） |
+| **source/** | ドメインの真実（正規化されたデータ） |
 | **toc/** | ドキュメント単位の導出（何がドキュメントになるか） |
 | **templates/** | 表示（どう見せるか） |
 
@@ -19,7 +19,7 @@ toc はドキュメント単位を定義するが、それをページとして�
 ## 依存関係
 
 ```
-Data（生データ）
+Source（生データ）
   ↓ 参照
 ToC（ドキュメント単位）
   ↓ pagination.data で参照
@@ -48,7 +48,7 @@ toc/
 ```yaml
 # toc/erds.yaml.njk
 erds:
-  {% for cat in data.entities | map(attribute="category") | unique %}
+  {% for cat in source.entities | map(attribute="category") | unique %}
   - id: {{ cat }}
     title: {{ cat }} の ER図
     sectionId: {{ cat }}
@@ -56,7 +56,7 @@ erds:
   {% endfor %}
 ```
 
-- `data` オブジェクトにアクセス可能（data/ から読み込まれた全データ）
+- `source` オブジェクトにアクセス可能（source/ から読み込まれた全データ）
 - Nunjucks のフィルタが使える（`map`, `unique`, `selectattr` など）
 - 出力は YAML としてパースされ、`toc` オブジェクトにマージされる
 
@@ -82,7 +82,7 @@ erds:
 ```yaml
 # toc/erds.yaml.njk
 erds:
-  {% for cat in data.entities | map(attribute="category") | unique %}
+  {% for cat in source.entities | map(attribute="category") | unique %}
   - id: {{ cat }}
     title: {{ cat }} の ER図
     sectionId: {{ cat }}
@@ -102,7 +102,7 @@ permalink: "{{ entry.permalink }}"
 
 # {{ entry.title }} {#{{ entry.sectionId }}}
 
-{% set entities = data.entities | selectattr("category", "eq", entry.id) %}
+{% set entities = source.entities | selectattr("category", "eq", entry.id) %}
 {% for e in entities %}
 - {{ e.name }}
 {% endfor %}
@@ -115,7 +115,7 @@ permalink: "{{ entry.permalink }}"
 ```yaml
 # toc/erds.yaml.njk
 erds:
-  {% for cat in data.entities | map(attribute="category") | unique %}
+  {% for cat in source.entities | map(attribute="category") | unique %}
   - id: {{ cat }}
     title: {{ cat }} の ER図
     sectionId: {{ cat }}
@@ -134,7 +134,7 @@ permalink: "erds.md"
 {% for entry in toc.erds %}
 ## {{ entry.title }} {#{{ entry.sectionId }}}
 
-{% set entities = data.entities | selectattr("category", "eq", entry.id) %}
+{% set entities = source.entities | selectattr("category", "eq", entry.id) %}
 {% for e in entities %}
 - {{ e.name }}
 {% endfor %}
@@ -148,16 +148,16 @@ permalink: "erds.md"
 - `entry` は toc の各エントリ（`id`, `title`, `sectionId`, `permalink` を持つ）
 - `permalink` は toc で定義したものを使用
 - 見出しには `{#{{ entry.sectionId }}}` でアンカーを付与
-- `data.entities` で生データも参照可能
+- `source.entities` で生データも参照可能
 - クエリ/フィルタはテンプレート側で行う
 
 ## 処理フロー
 
-1. `data/` から YAML を読み込み、`data` オブジェクトを構築
-2. `toc/*.yaml.njk` を `data` を渡してレンダリング
+1. `source/` から YAML を読み込み、`source` オブジェクトを構築
+2. `toc/*.yaml.njk` を `source` を渡してレンダリング
 3. レンダリング結果を YAML としてパース
 4. 全ファイルの結果をマージして `toc` オブジェクトを構築
-5. テンプレートに `{ data, toc }` を渡す
+5. テンプレートに `{ source, toc }` を渡す
 
 ## 設計判断
 
@@ -184,7 +184,7 @@ pagination:
 
 # 避けたい: テンプレートがクエリロジックを持つ
 pagination:
-  data: data.entities | groupby("category")
+  data: source.entities | groupby("category")
 ```
 
 ## ページ間リンク
@@ -196,7 +196,7 @@ pagination:
 ```yaml
 # toc/erds.yaml.njk
 erds:
-  {% for cat in data.entities | map(attribute="category") | unique %}
+  {% for cat in source.entities | map(attribute="category") | unique %}
   - id: {{ cat }}
     title: {{ cat }} の ER図
     permalink: erds/{{ cat }}.md
@@ -250,7 +250,7 @@ config.addFilter('relativeFrom', (to: string, from: string) => {
 ### 例1: カテゴリ別 ERD（ページ分割）
 
 ```yaml
-# data/entities.yaml
+# source/entities.yaml
 - id: User
   name: User
   category: user-management
@@ -265,7 +265,7 @@ config.addFilter('relativeFrom', (to: string, from: string) => {
 ```yaml
 # toc/erds.yaml.njk
 erds:
-  {% for cat in data.entities | map(attribute="category") | unique %}
+  {% for cat in source.entities | map(attribute="category") | unique %}
   - id: {{ cat }}
     title: {{ cat }} の ER図
     sectionId: {{ cat }}
@@ -285,14 +285,14 @@ permalink: "{{ entry.permalink }}"
 
 # {{ entry.title }} {#{{ entry.sectionId }}}
 
-{% set entities = data.entities | selectattr("category", "eq", entry.id) %}
+{% set entities = source.entities | selectattr("category", "eq", entry.id) %}
 ...
 ```
 
 ### 例2: 明示的に定義された DFD（ページ分割）
 
 ```yaml
-# data/dfds.yaml
+# source/dfds.yaml
 - id: user-flow
   name: User Flow
   scope:
@@ -306,7 +306,7 @@ permalink: "{{ entry.permalink }}"
 ```yaml
 # toc/dfds.yaml.njk
 dfds:
-  {% for dfd in data.dfds %}
+  {% for dfd in source.dfds %}
   - id: {{ dfd.id }}
     title: {{ dfd.name }}
     sectionId: {{ dfd.id }}
@@ -326,8 +326,8 @@ permalink: "{{ entry.permalink }}"
 
 # {{ entry.title }} {#{{ entry.sectionId }}}
 
-{% set dfd = data.dfds | selectattr("id", "eq", entry.id) | first %}
-{% set entities = data.entities | selectattr("id", "in", dfd.scope.entities) %}
+{% set dfd = source.dfds | selectattr("id", "eq", entry.id) | first %}
+{% set entities = source.entities | selectattr("id", "in", dfd.scope.entities) %}
 ...
 ```
 
@@ -336,7 +336,7 @@ permalink: "{{ entry.permalink }}"
 ```yaml
 # toc/dfds.yaml.njk（例2と同じだが permalink が異なる）
 dfds:
-  {% for dfd in data.dfds %}
+  {% for dfd in source.dfds %}
   - id: {{ dfd.id }}
     title: {{ dfd.name }}
     sectionId: {{ dfd.id }}
@@ -355,8 +355,8 @@ permalink: "dfds.md"
 {% for entry in toc.dfds %}
 ## {{ entry.title }} {#{{ entry.sectionId }}}
 
-{% set dfd = data.dfds | selectattr("id", "eq", entry.id) | first %}
-{% set entities = data.entities | selectattr("id", "in", dfd.scope.entities) %}
+{% set dfd = source.dfds | selectattr("id", "eq", entry.id) | first %}
+{% set entities = source.entities | selectattr("id", "in", dfd.scope.entities) %}
 ...
 
 {% endfor %}

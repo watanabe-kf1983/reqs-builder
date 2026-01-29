@@ -26,8 +26,8 @@ Validator と Generator を疎結合にし、検証結果ファイルを介し�
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│ 1. CLI Watcher (schema/, data/ を監視)                          │
-│    chokidar -w schema/ -w data/ --debounce 500                 │
+│ 1. CLI Watcher (schema/, source/ を監視)                        │
+│    chokidar -w schema/ -w source/ --debounce 500               │
 └─────────────────────┬───────────────────────────────────────────┘
                       ↓
 ┌─────────────────────────────────────────────────────────────────┐
@@ -65,7 +65,7 @@ Validator と Generator の「契約」として機能：
 ```yaml
 # .validation-result.yaml
 status: valid  # or invalid
-content_hash: "a1b2c3..."  # schema/ + data/ のハッシュ
+content_hash: "a1b2c3..."  # schema/ + source/ のハッシュ
 timestamp: "2024-01-15T10:30:00Z"
 errors: []  # invalid時はエラー一覧
 ```
@@ -77,7 +77,7 @@ errors: []  # invalid時はエラー一覧
 
 ```bash
 # シェルで同等の処理
-find schema/ data/ -name '*.yaml' | sort | while read f; do echo "$f"; cat "$f"; done | sha256sum
+find schema/ source/ -name '*.yaml' | sort | while read f; do echo "$f"; cat "$f"; done | sha256sum
 ```
 
 ## 設計判断
@@ -105,7 +105,7 @@ find schema/ data/ -name '*.yaml' | sort | while read f; do echo "$f"; cat "$f";
 #!/bin/bash
 # reqs-builder dev
 
-chokidar -w schema/ -w data/ --debounce 500 -- reqs-builder validate &
+chokidar -w schema/ -w source/ --debounce 500 -- reqs-builder validate &
 chokidar -w .validation-result.yaml -w reports/ -w templates/ --debounce 300 -- reqs-builder generate &
 hugo server &
 

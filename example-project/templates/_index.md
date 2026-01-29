@@ -1,6 +1,6 @@
 # エンティティ一覧
 
-{% for entity in entities -%}
+{% for entity in source.entities -%}
 - [{{ entity.name }}](./entities/{{ entity.id }}.md) - {{ entity.description }}
 {% endfor %}
 
@@ -8,6 +8,6 @@
 
 # リレーション
 
-{% for rel in relations -%}
+{% for rel in source.relations -%}
 - **{{ rel.from }}** → **{{ rel.to }}** ({{ rel.cardinality }}): {{ rel.description }}
 {% endfor %}

@@ -126,7 +126,7 @@ markdown-descriptions:
 
 ## 使用例
 
-### 入力ファイル（data/descriptions.md）
+### 入力ファイル（source/descriptions.md）
 
 ```markdown
 # エンティティ定義
@@ -149,7 +149,7 @@ markdown-descriptions:
 ### YAMLデータとの紐付け
 
 ```yaml
-# data/entities.yaml
+# source/entities.yaml
 entities:
   - id: user-entity
     name: ユーザー

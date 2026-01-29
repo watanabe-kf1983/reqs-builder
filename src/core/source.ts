@@ -7,14 +7,14 @@ type DataObject = Record<string, unknown>;
 
 /**
  * Load all YAML files from a directory and deep merge them.
- * @param dirPath - Path to the data directory
- * @returns Merged data object
+ * @param dirPath - Path to the source directory
+ * @returns Merged source object
  * @throws Error if directory doesn't exist, YAML is invalid, or keys conflict
  */
-export function loadDataDir(dirPath: string): DataObject {
+export function buildSource(dirPath: string): DataObject {
   return getFiles(dirPath)
-    .filter(isDataFile)
-    .map(loadDataFile)
+    .filter(isSourceFile)
+    .map(loadSourceFile)
     .reduce((acc, data) => deepmerge(acc, data, { arrayMerge: arrayMergeWithError }), {});
 }
 
@@ -25,7 +25,7 @@ function getFiles(dirPath: string): string[] {
   const resolvedPath = path.resolve(dirPath);
 
   if (!fs.existsSync(resolvedPath)) {
-    throw new Error(`Data directory not found: ${resolvedPath}`);
+    throw new Error(`Source directory not found: ${resolvedPath}`);
   }
 
   const stat = fs.statSync(resolvedPath);
@@ -39,12 +39,12 @@ function getFiles(dirPath: string): string[] {
     .map((file) => path.join(resolvedPath, file));
 }
 
-const isDataFile = (file: string): boolean => file.endsWith('.yaml') || file.endsWith('.yml');
+const isSourceFile = (file: string): boolean => file.endsWith('.yaml') || file.endsWith('.yml');
 
 /**
- * Load and parse a data file (YAML).
+ * Load and parse a source file (YAML).
  */
-function loadDataFile(filePath: string): DataObject {
+function loadSourceFile(filePath: string): DataObject {
   const content = fs.readFileSync(filePath, 'utf-8');
   const parsed = yaml.load(content);
 
