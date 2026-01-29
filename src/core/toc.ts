@@ -22,9 +22,10 @@ nunjucksEnv.addFilter('map', (arr: unknown[], kwargs: { attribute: string }) =>
  *
  * @param dirPath - Path to the toc directory
  * @param source - Source data to pass to Nunjucks templates
+ * @param outputDir - Optional directory to write rendered YAML files (for debugging)
  * @returns Merged toc object, or empty object if directory doesn't exist
  */
-export function buildToc(dirPath: string, source: DataObject): DataObject {
+export function buildToc(dirPath: string, source: DataObject, outputDir?: string): DataObject {
   const resolvedPath = path.resolve(dirPath);
 
   // Return empty object if directory doesn't exist (toc is optional)
@@ -37,9 +38,30 @@ export function buildToc(dirPath: string, source: DataObject): DataObject {
     throw new Error(`Path is not a directory: ${resolvedPath}`);
   }
 
-  return getFiles(resolvedPath)
-    .filter(isTocFile)
-    .map((file) => renderTocFile(file, source))
+  const tocFiles = getFiles(resolvedPath).filter(isTocFile);
+
+  // Phase 1: Render all files and optionally save to outputDir
+  const renderedFiles = tocFiles.map((file) => {
+    const content = fs.readFileSync(file, 'utf-8');
+    const rendered = nunjucksEnv.renderString(content, { source });
+    const baseName = path.basename(file, '.njk'); // e.g., "entities.yaml"
+    return { file, baseName, rendered };
+  });
+
+  // Write rendered files to outputDir if specified
+  if (outputDir) {
+    const resolvedOutputDir = path.resolve(outputDir);
+    if (!fs.existsSync(resolvedOutputDir)) {
+      fs.mkdirSync(resolvedOutputDir, { recursive: true });
+    }
+    for (const { baseName, rendered } of renderedFiles) {
+      fs.writeFileSync(path.join(resolvedOutputDir, baseName), rendered);
+    }
+  }
+
+  // Phase 2: Parse all rendered YAML and merge
+  return renderedFiles
+    .map(({ file, rendered }) => parseTocYaml(file, rendered))
     .reduce((acc, data) => deepmerge(acc, data, { arrayMerge: arrayMergeWithError }), {});
 }
 
@@ -56,11 +78,9 @@ function getFiles(dirPath: string): string[] {
 const isTocFile = (file: string): boolean => file.endsWith('.yaml.njk');
 
 /**
- * Render a toc template file with source data and parse as YAML.
+ * Parse rendered YAML content into an object.
  */
-function renderTocFile(filePath: string, source: DataObject): DataObject {
-  const content = fs.readFileSync(filePath, 'utf-8');
-  const rendered = nunjucksEnv.renderString(content, { source });
+function parseTocYaml(filePath: string, rendered: string): DataObject {
   const parsed = yaml.load(rendered);
 
   if (typeof parsed !== 'object' || parsed === null) {

@@ -9,6 +9,7 @@ export async function generateCommand(config: Config): Promise<void> {
   const tocDir = resolve(process.cwd(), config.toc.dir);
   const templateDir = resolve(process.cwd(), config.templates.dir);
   const outputDir = resolve(process.cwd(), config.output.doc.dir);
+  const tocOutputDir = resolve(process.cwd(), 'output/tocs');
 
   console.log('Generating documents...');
   console.log(`  Source directory: ${sourceDir}`);
@@ -18,7 +19,7 @@ export async function generateCommand(config: Config): Promise<void> {
   console.log('');
 
   const source = buildSource(sourceDir);
-  const toc = buildToc(tocDir, source);
+  const toc = buildToc(tocDir, source, tocOutputDir);
   await expandTemplateDir(templateDir, { source, toc }, outputDir);
 
   console.log('Done.');
