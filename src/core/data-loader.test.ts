@@ -1,12 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { loadDataDir } from './data-loader.js';
+import { buildSource } from './data-loader.js';
 import path from 'path';
 
 const fixturesDir = path.join(__dirname, 'data-loader.fixtures');
 
-describe('loadDataDir', () => {
+describe('buildSource', () => {
   it('should load and merge YAML files from a directory', () => {
-    const result = loadDataDir(path.join(fixturesDir, 'valid'));
+    const result = buildSource(path.join(fixturesDir, 'valid'));
 
     expect(result).toHaveProperty('entities');
     expect(result).toHaveProperty('relations');
@@ -15,7 +15,7 @@ describe('loadDataDir', () => {
   });
 
   it('should parse nested structures correctly', () => {
-    const result = loadDataDir(path.join(fixturesDir, 'valid'));
+    const result = buildSource(path.join(fixturesDir, 'valid'));
     const entities = result.entities as { id: string; fields: unknown[] }[];
 
     expect(entities[0].id).toBe('user');
@@ -28,29 +28,29 @@ describe('loadDataDir', () => {
   });
 
   it('should throw an error for non-existent directory', () => {
-    expect(() => loadDataDir('/non/existent/dir')).toThrow('Data directory not found');
+    expect(() => buildSource('/non/existent/dir')).toThrow('Source directory not found');
   });
 
   it('should throw an error when path is not a directory', () => {
-    expect(() => loadDataDir(path.join(fixturesDir, 'valid', 'entities.yaml'))).toThrow(
+    expect(() => buildSource(path.join(fixturesDir, 'valid', 'entities.yaml'))).toThrow(
       'Path is not a directory'
     );
   });
 
   it('should throw an error for invalid YAML (not an object)', () => {
-    expect(() => loadDataDir(path.join(fixturesDir, 'invalid'))).toThrow(
+    expect(() => buildSource(path.join(fixturesDir, 'invalid'))).toThrow(
       'Invalid YAML: expected object'
     );
   });
 
   it('should throw an error on array merge conflict', () => {
-    expect(() => loadDataDir(path.join(fixturesDir, 'array-conflict'))).toThrow(
+    expect(() => buildSource(path.join(fixturesDir, 'array-conflict'))).toThrow(
       'Array merge conflict'
     );
   });
 
   it('should deep merge nested objects', () => {
-    const result = loadDataDir(path.join(fixturesDir, 'deep-merge'));
+    const result = buildSource(path.join(fixturesDir, 'deep-merge'));
     const config = result.config as {
       database: Record<string, unknown>;
       cache: Record<string, unknown>;
@@ -63,7 +63,7 @@ describe('loadDataDir', () => {
   });
 
   it('should overwrite scalar values in deep merge (last file wins)', () => {
-    const result = loadDataDir(path.join(fixturesDir, 'deep-conflict'));
+    const result = buildSource(path.join(fixturesDir, 'deep-conflict'));
     const config = result.config as { database: Record<string, unknown> };
 
     // file2.yaml comes after file1.yaml alphabetically, so its value wins

@@ -1,6 +1,6 @@
 import { resolve } from 'path';
 import { Config } from '../config.js';
-import { loadDataDir } from '../core/data-loader.js';
+import { buildSource } from '../core/data-loader.js';
 import { expandTemplateDir } from '../core/template-expander.js';
 
 export async function generateCommand(config: Config): Promise<void> {
@@ -14,7 +14,7 @@ export async function generateCommand(config: Config): Promise<void> {
   console.log(`  Output directory: ${outputDir}`);
   console.log('');
 
-  const source = loadDataDir(sourceDir);
+  const source = buildSource(sourceDir);
   await expandTemplateDir(templateDir, { source }, outputDir);
 
   console.log('Done.');
